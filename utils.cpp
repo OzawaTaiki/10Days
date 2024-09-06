@@ -416,26 +416,26 @@ void DrawHorizontalLineAtY(float _y, const sRendering& _rendering)
 bool IsCollision(const Rect& _rect1, const Rect& _rect2)
 {
 	//矩形の衝突判定
-	if (_rect1.worldVertices[0].x <= _rect2.worldVertices[1].x &&
-		_rect1.worldVertices[1].x >= _rect2.worldVertices[0].x &&
-		_rect1.worldVertices[0].y <= _rect2.worldVertices[2].y &&
-		_rect1.worldVertices[2].y >= _rect2.worldVertices[0].y)
+	if (_rect1.worldVerties[0].x <= _rect2.worldVerties[1].x - 1 &&
+		_rect1.worldVerties[1].x - 1 >= _rect2.worldVerties[0].x &&
+		_rect1.worldVerties[0].y <= _rect2.worldVerties[2].y - 1 &&
+		_rect1.worldVerties[2].y - 1 >= _rect2.worldVerties[0].y)
 	{
 		return true;
 	}
 	//rect1がrect2に内包されているか
-	else if (_rect1.worldVertices[0].x <= _rect2.worldVertices[0].x &&
-			 _rect1.worldVertices[1].x >= _rect2.worldVertices[1].x &&
-			 _rect1.worldVertices[0].y <= _rect2.worldVertices[0].y &&
-			 _rect1.worldVertices[2].y >= _rect2.worldVertices[2].y)
+	else if (_rect1.worldVerties[0].x <= _rect2.worldVerties[0].x &&
+			 _rect1.worldVerties[1].x - 1 >= _rect2.worldVerties[1].x - 1 &&
+			 _rect1.worldVerties[0].y <= _rect2.worldVerties[0].y &&
+			 _rect1.worldVerties[2].y - 1 >= _rect2.worldVerties[2].y - 1)
 	{
 		return true;
 	}
 	//上の逆
-	else if (_rect1.worldVertices[0].x >= _rect2.worldVertices[0].x &&
-			 _rect1.worldVertices[1].x <= _rect2.worldVertices[1].x &&
-			 _rect1.worldVertices[0].y >= _rect2.worldVertices[0].y &&
-			 _rect1.worldVertices[2].y <= _rect2.worldVertices[2].y)
+	else if (_rect1.worldVerties[0].x >= _rect2.worldVerties[0].x &&
+			 _rect1.worldVerties[1].x - 1 <= _rect2.worldVerties[1].x - 1 &&
+			 _rect1.worldVerties[0].y >= _rect2.worldVerties[0].y &&
+			 _rect1.worldVerties[2].y - 1 <= _rect2.worldVerties[2].y - 1)
 	{
 		return true;
 	}
@@ -444,20 +444,20 @@ bool IsCollision(const Rect& _rect1, const Rect& _rect2)
 
 bool IsCollision(const Rect& _rect, const sLine& _line)
 {
-	if (_line.sPos.y >= _rect.worldVertices[0].y &&
-		_line.sPos.y <= _rect.worldVertices[2].y ||
-		_line.ePos.y >= _rect.worldVertices[0].y &&
-		_line.ePos.y <= _rect.worldVertices[2].y)
+	if (_line.sPos.y >= _rect.worldVerties[0].y &&
+		_line.sPos.y <= _rect.worldVerties[2].y ||
+		_line.ePos.y >= _rect.worldVerties[0].y &&
+		_line.ePos.y <= _rect.worldVerties[2].y)
 	{
 		if (_line.sPos.x < _line.ePos.x &&
-			_rect.worldVertices[0].x <= _line.sPos.x&&
-			_rect.worldVertices[1].x >= _line.ePos.x)
+			_rect.worldVerties[0].x <= _line.sPos.x&&
+			_rect.worldVerties[1].x >= _line.ePos.x)
 		{
 			return true;
 		}
 		else if (_line.sPos.x > _line.ePos.x &&
-			_rect.worldVertices[0].x <= _line.ePos.x &&
-			_rect.worldVertices[1].x >= _line.sPos.x)
+			_rect.worldVerties[0].x <= _line.ePos.x &&
+			_rect.worldVerties[1].x >= _line.sPos.x)
 		{
 			return true;
 		}
@@ -560,7 +560,7 @@ void Rect::Calculate()
 {
 	for (size_t index = 0; index < 4; ++index)
 	{
-		worldVertices[index] = pos + localVertices[index];
+		worldVerties[index] = pos + localVertices[index];
 	}
 }
 
@@ -568,6 +568,6 @@ void Rect::Calculate(const Vector2& _pos)
 {
 	for (size_t index = 0; index < 4; ++index)
 	{
-		worldVertices[index] = localVertices[index] + _pos;
+		worldVerties[index] = localVertices[index] + _pos;
 	}
 }

@@ -50,7 +50,8 @@ struct Rect
 	Vector2 size;
 
 	Vector2 localVertices[4];
-	Vector2 worldVertices[4];
+	Vector2 worldVerties[4];
+	Vector2 screenVerties[4];
 
 	Rect() = default;
 	Rect(const Vector2& _pos, const Vector2& _size);

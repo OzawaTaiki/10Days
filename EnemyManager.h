@@ -14,6 +14,7 @@ public:
 	void Draw(const sRendering& _rendring);
 
 	void AddEnemy(const Vector2& _position);
+	void PositionUpdate();
 
 	std::list< std::unique_ptr<Enemy>>& GetEnemyList() { return enemis_; }
 

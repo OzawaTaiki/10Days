@@ -1,4 +1,4 @@
-#include "Enemy.h"
+﻿#include "Enemy.h"
 #include "ImGuiManager.h"
 
 void Enemy::Initialize(const Vector2& _position)
@@ -16,6 +16,7 @@ void Enemy::Initialize(const Vector2& _position)
 	velocity_ = { 0,0 };
 	accelelation_ = { 0,0.5f };
 
+	move_ = { 0,0 };
 	knockbackVelocity_ = { 7.0f,-5.0f };
 	isKnockback_ = false;
 	moveSpeed_ = -0.5f;
@@ -24,6 +25,10 @@ void Enemy::Initialize(const Vector2& _position)
 
 	hp_ = kMaxHp_;
 	isAlive_ = true;
+
+	damageCoolTime_ = 120;
+	currentCoolTime_ = damageCoolTime_;
+	isInvincible_ = false;
 
 	textureHandle_ = 0;
 	color_ = 0xffffffff;
@@ -38,6 +43,7 @@ void Enemy::Update()
 #endif // _DEBUG
 
 	Move();
+	UpdateInvincible();
 
 	rect_.Calculate();
 	canMoving_ = false;
@@ -51,13 +57,13 @@ void Enemy::Draw(const sRendering& _rendring)
 
 	for (size_t index = 0; index < 4; ++index)
 	{
-		rect_.worldVertices[index] = Transform(rect_.localVertices[index], wvpvpMat);
+		rect_.screenVerties[index] = Transform(rect_.localVertices[index], wvpvpMat);
 	}
 
-	Novice::DrawQuad((int)rect_.worldVertices[0].x, (int)rect_.worldVertices[0].y,
-					 (int)rect_.worldVertices[1].x, (int)rect_.worldVertices[1].y,
-					 (int)rect_.worldVertices[2].x, (int)rect_.worldVertices[2].y,
-					 (int)rect_.worldVertices[3].x, (int)rect_.worldVertices[3].y,
+	Novice::DrawQuad((int)rect_.screenVerties[0].x, (int)rect_.screenVerties[0].y,
+					 (int)rect_.screenVerties[1].x, (int)rect_.screenVerties[1].y,
+					 (int)rect_.screenVerties[2].x, (int)rect_.screenVerties[2].y,
+					 (int)rect_.screenVerties[3].x, (int)rect_.screenVerties[3].y,
 					 0, 0, (int)rect_.size.x, (int)rect_.size.y,
 					 textureHandle_, color_);
 }
@@ -80,9 +86,22 @@ void Enemy::OnCollision(CollisoinAttribute _attribute)
 		break;
 	case CollisoinAttribute::Enemy:
 		break;
+	case CollisoinAttribute::Stage:
+		if (move_.x == 0)
+			velocity_.x = 0;
+		if (move_.y == 0)
+			velocity_.y = 0;
+		break;
 	default:
 		break;
 	}
+}
+
+void Enemy::PositionUpdate()
+{
+	rect_.pos += move_;
+	move_ = { 0,0 };
+	rect_.Calculate();
 }
 
 void Enemy::Move()
@@ -90,35 +109,63 @@ void Enemy::Move()
 	if (isKnockback_)
 	{
 		velocity_ += accelelation_;
+		move_ += velocity_;
 
-		rect_.pos += velocity_;
-		if (rect_.pos.y >= 500 - 32)
+		/*if (rect_.pos.y >= 500 - 32)
 		{
 			rect_.pos.y = 500 - 32;
 			isKnockback_ = false;
-		}
+		}*/
 		return;
 	}
 
 	if (!canMoving_ || !Im_isMove_)
 		return;
 
-	rect_.pos.x += moveSpeed_;
+	velocity_.y += accelelation_.y;
+	if (velocity_.y > 15.0f)
+		velocity_.y = 15.0f;
+	move_.x += moveSpeed_;
+	move_.y += velocity_.y;
 }
 
 void Enemy::Damage()
 {
+	// 無敵時間中なら早期リターン
+	if (isInvincible_)
+		return;
+
+	// ダメージ
+	// ０以下なら死
 	hp_--;
 	if (hp_ <= 0)
 	{
 		isAlive_ = false;
 	}
+
+	// 無敵フラグをたてる
+	isInvincible_ = true;
 }
 
-void Enemy::Knockback()
+void Enemy::Knockback(const Vector2& _velocity)
 {
+	if (isKnockback_)
+		return;
+
 	isKnockback_ = true;
-	velocity_ = knockbackVelocity_;
+	velocity_ = _velocity;
+}
+
+void Enemy::UpdateInvincible()
+{
+	if (!isInvincible_)
+		return;
+	// 無敵時間のカウント
+	if (--currentCoolTime_ <= 0)
+	{
+		isInvincible_ = false;
+		currentCoolTime_ = damageCoolTime_;
+	}
 }
 
 void Enemy::ShowImgui()
@@ -126,6 +173,7 @@ void Enemy::ShowImgui()
 	ImGui::Begin("Enemy");
 	ImGui::DragFloat2("position", &rect_.pos.x, 1.0f);
 	ImGui::DragFloat("speed", &moveSpeed_, 0.1f);
+	ImGui::DragFloat2("move", &move_.x, 0.1f);
 	ImGui::Text("Moving : %s", canMoving_ ? "true" : "false");
 	ImGui::Text("HP : %d", hp_);
 	ImGui::Text("isAlive : %s", isAlive_ ? "true" : "false");

@@ -32,13 +32,13 @@ void CrushingWall::Draw(const sRendering& _rendring)
 
 	for (size_t index = 0; index < 4; ++index)
 	{
-		rect_.worldVertices[index] = Transform(rect_.localVertices[index], wvpvpMat);
+		rect_.screenVerties[index] = Transform(rect_.localVertices[index], wvpvpMat);
 	}
 
-	Novice::DrawQuad((int)rect_.worldVertices[0].x, (int)rect_.worldVertices[0].y,
-					 (int)rect_.worldVertices[1].x, (int)rect_.worldVertices[1].y,
-					 (int)rect_.worldVertices[2].x, (int)rect_.worldVertices[2].y,
-					 (int)rect_.worldVertices[3].x, (int)rect_.worldVertices[3].y,
+	Novice::DrawQuad((int)rect_.screenVerties[0].x, (int)rect_.screenVerties[0].y,
+					 (int)rect_.screenVerties[1].x, (int)rect_.screenVerties[1].y,
+					 (int)rect_.screenVerties[2].x, (int)rect_.screenVerties[2].y,
+					 (int)rect_.screenVerties[3].x, (int)rect_.screenVerties[3].y,
 					 0, 0, (int)rect_.size.x, (int)rect_.size.y,
 					 textureHandle_, color_);
 }

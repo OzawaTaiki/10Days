@@ -13,6 +13,8 @@ public:
 
 	void OnCollision();
 
+	void PositionUpdate();
+	Vector2& GetMove() { return move_; }
 	Vector2* GetPositoinPtr() { return &rect_.pos; }
 	Rect GetRect() const { return rect_; };
 	CollisoinAttribute GetCollisoinAttribute() { return CollisoinAttribute::Thwomp; }
@@ -24,8 +26,10 @@ private:
 	void Falling();
 
 	Rect					rect_;
+	Rect					knockbackRect_;
 	Vector2					scale_;
 	float					rotate_;
+	Vector2					move_;
 
 	float					moveSpeed_;
 

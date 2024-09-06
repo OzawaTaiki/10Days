@@ -29,16 +29,16 @@ void InGame::Update()
 	/*
 	//TODO: 敵．護衛対象の実装
 		敵
-			カメラ内にいるとき移動（画面サイズの矩形を用意，それとの判定をとる
-			ドッスンとの衝突判定
+				カメラ内にいるとき移動
+				ドッスンとの衝突判定
 			ドッスンによるノックバック
 		護衛対象
 				カメラ内にいるとき移動
 				壁との衝突判定
 				壁によるノックバック
-			敵によるノックバック
+				敵によるノックバック
 			ドッスンによるノックバック
-			死の概念
+				死の概念
 
 	//TODO: 迫る壁の実装
 				時間経過で浸食進行
@@ -56,6 +56,11 @@ void InGame::Update()
 	//TODO: マップチップとの衝突判定
 
 	CheckCollisions();
+
+	thwomp_->PositionUpdate();
+	defenceTarget_->PositionUpdate();
+	enemyManager_->PositionUpdate();
+
 }
 
 void InGame::Draw()
@@ -65,6 +70,7 @@ void InGame::Draw()
 	DrawAxis(re);
 	DrawHorizontalLineAtY(500, re);
 
+	stage_->Draw(re);
 	camera_->Draw(re);
 	thwomp_->Draw(re);
 	enemyManager_->Draw(re);
@@ -74,8 +80,14 @@ void InGame::Draw()
 
 void InGame::CheckCollisions()
 {
-	Rect cameraRect= camera_->GetRect();
-	Rect targetRect= defenceTarget_->GetRect();
+	Rect enemyRect;
+	Rect cameraRect = camera_->GetRect();
+	Rect thwompRect = thwomp_->GetRect();
+	Rect wallRect = crushingWall_->GetRect();
+	Rect targetRect = defenceTarget_->GetRect();
+
+	
+
 
 	if (IsCollision(cameraRect, targetRect))
 	{
@@ -84,7 +96,9 @@ void InGame::CheckCollisions()
 
 	for (auto& enemy : enemyManager_->GetEnemyList())
 	{
-		Rect enemyRect = enemy->GetRect();
+		enemyRect = enemy->GetRect();
+		
+
 		if (IsCollision(cameraRect, enemyRect))
 		{
 			enemy->OnCollision(CollisoinAttribute::ScreenRect);
@@ -95,18 +109,24 @@ void InGame::CheckCollisions()
 			defenceTarget_->OnCollision(CollisoinAttribute::Enemy);
 			enemy->OnCollision(CollisoinAttribute::DefenceTarget);
 		}
+		if (IsCollision(thwompRect, enemyRect))
+		{
+			thwomp_->OnCollision();
+			enemy->OnCollision(CollisoinAttribute::Thwomp);
+		}
+
+		if (stage_->CollisionCheck(enemyRect, enemy->GetMove()))
+		{
+			enemy->OnCollision(CollisoinAttribute::Stage);
+		}
 
 	}
-
-
-	Rect wallRect = crushingWall_->GetRect();
 
 	if (IsCollision(wallRect, targetRect))
 	{
 		defenceTarget_->OnCollision(CollisoinAttribute::CrushingWall);
 	}
 
-	Rect thwompRect = thwomp_->GetRect();
 
 	if (IsCollision(thwompRect, targetRect))
 	{
@@ -115,14 +135,22 @@ void InGame::CheckCollisions()
 	}
 
 	sLine cRectDownEdge = {
-		.sPos = cameraRect.worldVertices[2],
-		.ePos = cameraRect.worldVertices[3],
+		.sPos = cameraRect.screenVerties[2],
+		.ePos = cameraRect.screenVerties[3],
 		.color = 0xffffffff
 	};
 
-	if (IsCollision(thwompRect, cameraRect))
+	if (IsCollision(thwompRect, cRectDownEdge))
 	{
 		thwomp_->OnCollision();
 	}
 
+	if (stage_->CollisionCheck(thwompRect, thwomp_->GetMove()))
+	{
+		thwomp_->OnCollision();
+	}
+	if (stage_->CollisionCheck(targetRect, defenceTarget_->GetMove()))
+	{
+		defenceTarget_->OnCollision(CollisoinAttribute::Stage);
+	}
 }

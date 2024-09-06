@@ -14,7 +14,102 @@ void Stage::Update()
 
 void Stage::Draw(const sRendering& _rendring)
 {
-	_rendring;
+	for (int y = 0; y < maps_.size(); y++)
+	{
+		for (int x = 0; x < maps_[y].size(); x++)
+		{
+			if (maps_[y][x] != 0)
+			{
+				Vector2 pos = { (float)x * kMapchipSize_,(float)y * kMapchipSize_ };
+				Matrix3x3 wMat = MakeAffineMatrix({ 1,1 }, 0, pos);
+				Matrix3x3 wvpvpMat = _rendring.GetwvpVpMat(wMat);
+
+				Vector2 drawpos = Transform({ 0,0 }, wvpvpMat);
+				Novice::DrawBox((int)drawpos.x, (int)drawpos.y, (int)kMapchipSize_ - 1, (int)kMapchipSize_ - 1, 0, WHITE, kFillModeSolid);
+			}
+		}
+	}
+}
+
+bool Stage::CollisionCheck(Rect& _rect,Vector2& _move)
+{
+	int posX[2];
+	int posY[2];
+
+	bool hit = false;
+
+	if (_move.x != 0)
+	{
+		posY[0] = static_cast<int>(_rect.worldVerties[0].y / kMapchipSize_);
+		posY[1] = static_cast<int>((_rect.worldVerties[2].y - 1) / kMapchipSize_);
+
+		if (_move.x < 0)
+		{
+			posX[0] = static_cast<int>((_rect.worldVerties[0].x + _move.x) / kMapchipSize_);
+			posX[1] = posX[0];
+		}
+		else
+		{
+			posX[0] = static_cast<int>((_rect.worldVerties[1].x + _move.x - 1) / kMapchipSize_);
+			posX[1] = posX[0];
+		}
+
+		if (posX[0] < 0 || posX[1] < 0 ||
+			posY[0] < 0 || posY[1] < 0)
+			hit = true;
+
+		if (maps_[posY[0]][posX[0]] != 0 &&
+			maps_[posY[1]][posX[1]] != 0 &&
+			(maps_[posY[0]][posX[0]] <= 9 ||
+			maps_[posY[1]][posX[1]] <= 9))
+		{
+			if (_move.x < 0)
+				_rect.pos.x = posX[0] * kMapchipSize_ + _rect.size.x / 2.0f;
+			else
+				_rect.pos.x = (posX[1] * kMapchipSize_ - 1) +_rect.size.x / 2.0f;
+			_move.x = 0;
+			hit = true;
+		}
+	}
+
+	Clamp(_rect, _move);;
+
+	if (_move.y != 0)
+	{
+		posX[0] = static_cast<int>(_rect.worldVerties[0].x / kMapchipSize_);
+		posX[1] = static_cast<int>((_rect.worldVerties[1].x - 1) / kMapchipSize_);
+
+		if (_move.y < 0)
+		{
+			posY[0] = static_cast<int>((_rect.worldVerties[0].y + _move.y) / kMapchipSize_);
+			posY[1] = posY[0];
+		}
+		else
+		{
+			posY[0] = static_cast<int>((_rect.worldVerties[2].y + _move.y - 1) / kMapchipSize_);
+			posY[1] = posY[0];
+		}
+
+		if (posX[0] < 0 || posX[1] < 0 ||
+			posY[0] < 0 || posY[1] < 0)
+			hit = true;
+
+		if (maps_[posY[0]][posX[0]] != 0 &&
+			maps_[posY[1]][posX[1]] != 0 &&
+			(maps_[posY[0]][posX[0]] <= 9 ||
+			maps_[posY[1]][posX[1]] <= 9))
+		{
+			if (_move.y < 0)
+				_rect.pos.y = posY[0] * kMapchipSize_ + _rect.size.y / 2.0f;
+			else
+				_rect.pos.y = (posY[1] * kMapchipSize_ - 1) +_rect.size.y / 2.0f;
+			_move.y = 0;
+			hit = true;
+		}
+	}
+	Clamp(_rect, _move);
+
+	return hit;
 }
 
 void Stage::LoadFile()
@@ -31,7 +126,6 @@ void Stage::LoadFile()
 	file.close();
 
 	std::string line;
-
 
 	int row = 0;
 
@@ -62,4 +156,13 @@ void Stage::LoadFile()
 		}
 		++row;
 	}
+}
+
+void Stage::Clamp(Rect& _rect, Vector2& _move)
+{
+	if (_rect.pos.x + _move.x - _rect.size.x / 2.0f < 0)
+		_move.x = _rect.size.x / 2.0f - _rect.pos.x;
+
+	if (_rect.pos.y + _move.y + _rect.size.y / 2.0f - 1.0f > static_cast<float> (maps_.size() * kMapchipSize_))
+		_move.y = _rect.size.y / 2.0f - _rect.pos.y;
 }
