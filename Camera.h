@@ -7,7 +7,7 @@ class Camera
 
 public:
 	void Initialize();
-	void Update();
+	void Update(bool _isReady);
 	void Draw(const sRendering& _rendring);
 
 	//Vector2 GetScroll(){return scroll; };
@@ -31,6 +31,8 @@ private:
 	Rect						screenRect_;
 
 	sRendering					rendering_;
+
+	bool						preIsReady_;
 
 	float						kWindowHeight_;
 	float						kWindowWidth_;

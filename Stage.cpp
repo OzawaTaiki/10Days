@@ -55,10 +55,12 @@ bool Stage::CollisionCheck(Rect& _rect,Vector2& _move)
 		}
 
 		if (posX[0] < 0 || posX[1] < 0 ||
-			posY[0] < 0 || posY[1] < 0)
+			posY[0] < 0 || posY[1] < 0 ||
+			posX[0] >= maps_[0].size() || posX[1] >= maps_[0].size() ||
+			posY[0] >= maps_.size()	   || posY[1] >= maps_.size())
 			hit = true;
 
-		if (maps_[posY[0]][posX[0]] != 0 &&
+		else if (maps_[posY[0]][posX[0]] != 0 &&
 			maps_[posY[1]][posX[1]] != 0 &&
 			(maps_[posY[0]][posX[0]] <= 9 ||
 			maps_[posY[1]][posX[1]] <= 9))
@@ -91,10 +93,12 @@ bool Stage::CollisionCheck(Rect& _rect,Vector2& _move)
 		}
 
 		if (posX[0] < 0 || posX[1] < 0 ||
-			posY[0] < 0 || posY[1] < 0)
+			posY[0] < 0 || posY[1] < 0 ||
+			posX[0] >= maps_[0].size() || posX[1] >= maps_[0].size() ||
+			posY[0] >= maps_.size() || posY[1] >= maps_.size())
 			hit = true;
 
-		if (maps_[posY[0]][posX[0]] != 0 &&
+		else if (maps_[posY[0]][posX[0]] != 0 &&
 			maps_[posY[1]][posX[1]] != 0 &&
 			(maps_[posY[0]][posX[0]] <= 9 ||
 			maps_[posY[1]][posX[1]] <= 9))
@@ -102,7 +106,7 @@ bool Stage::CollisionCheck(Rect& _rect,Vector2& _move)
 			if (_move.y < 0)
 				_rect.pos.y = posY[0] * kMapchipSize_ + _rect.size.y / 2.0f;
 			else
-				_rect.pos.y = (posY[1] * kMapchipSize_ - 1) +_rect.size.y / 2.0f;
+				_rect.pos.y = (posY[1] * kMapchipSize_ - 1) -_rect.size.y / 2.0f;
 			_move.y = 0;
 			hit = true;
 		}
@@ -160,9 +164,15 @@ void Stage::LoadFile()
 
 void Stage::Clamp(Rect& _rect, Vector2& _move)
 {
-	if (_rect.pos.x + _move.x - _rect.size.x / 2.0f < 0)
+	float limitX = static_cast<float>(maps_[0].size()) * kMapchipSize_;
+	if (_move.x != 0 && _rect.pos.x + _move.x - _rect.size.x / 2.0f < 0)
 		_move.x = _rect.size.x / 2.0f - _rect.pos.x;
 
-	if (_rect.pos.y + _move.y + _rect.size.y / 2.0f - 1.0f > static_cast<float> (maps_.size() * kMapchipSize_))
-		_move.y = _rect.size.y / 2.0f - _rect.pos.y;
+	else if (_move.x != 0 && _rect.pos.x + _move.x + _rect.size.x / 2.0f - 1.0f > limitX)
+		_move.x = limitX - _rect.pos.x - _rect.size.x / 2.0f + 1.0f;
+
+	float limitY = static_cast<float>(maps_.size()) * kMapchipSize_;
+	if (_move.y != 0 && _rect.pos.y + _move.y + _rect.size.y / 2.0f - 1.0f > limitY) {
+		_move.y = limitY - _rect.pos.y - _rect.size.y / 2.0f + 1.0f;
+	}
 }

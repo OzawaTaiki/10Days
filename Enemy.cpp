@@ -1,7 +1,8 @@
 ﻿#include "Enemy.h"
 #include "ImGuiManager.h"
+#include "Thwomp.h"
 
-void Enemy::Initialize(const Vector2& _position)
+void Enemy::Initialize(const Vector2& _position, Thwomp* _thwompPtr)
 {
 	Vector2 pos = _position;
 	Vector2 size = { 64,64 };
@@ -17,7 +18,8 @@ void Enemy::Initialize(const Vector2& _position)
 	accelelation_ = { 0,0.5f };
 
 	move_ = { 0,0 };
-	knockbackVelocity_ = { 7.0f,-5.0f };
+	baseKnockbackVelocity_ = { 7.0f,-5.0f };
+	knockbackVelocity_ = baseKnockbackVelocity_;
 	isKnockback_ = false;
 	moveSpeed_ = -0.5f;
 
@@ -32,6 +34,8 @@ void Enemy::Initialize(const Vector2& _position)
 
 	textureHandle_ = 0;
 	color_ = 0xffffffff;
+
+	thwompPtr_ = _thwompPtr;
 
 	Im_isMove_ = true;
 }
@@ -60,12 +64,21 @@ void Enemy::Draw(const sRendering& _rendring)
 		rect_.screenVerties[index] = Transform(rect_.localVertices[index], wvpvpMat);
 	}
 
+	
+
+	Novice::DrawQuad((int)rect_.screenVerties[0].x-1, (int)rect_.screenVerties[0].y-1,
+					 (int)rect_.screenVerties[1].x+1, (int)rect_.screenVerties[1].y-1,
+					 (int)rect_.screenVerties[2].x-1, (int)rect_.screenVerties[2].y+1,
+					 (int)rect_.screenVerties[3].x+1, (int)rect_.screenVerties[3].y+1,
+					 0, 0, (int)rect_.size.x+2, (int)rect_.size.y+2,
+					 textureHandle_, 0xff);
 	Novice::DrawQuad((int)rect_.screenVerties[0].x, (int)rect_.screenVerties[0].y,
 					 (int)rect_.screenVerties[1].x, (int)rect_.screenVerties[1].y,
 					 (int)rect_.screenVerties[2].x, (int)rect_.screenVerties[2].y,
 					 (int)rect_.screenVerties[3].x, (int)rect_.screenVerties[3].y,
 					 0, 0, (int)rect_.size.x, (int)rect_.size.y,
 					 textureHandle_, color_);
+
 }
 
 void Enemy::OnCollision(CollisoinAttribute _attribute)
@@ -90,7 +103,13 @@ void Enemy::OnCollision(CollisoinAttribute _attribute)
 		if (move_.x == 0)
 			velocity_.x = 0;
 		if (move_.y == 0)
+		{
 			velocity_.y = 0;
+			isKnockback_ = false;
+		}
+		break;
+	case CollisoinAttribute::KnockbacKRect:
+		CalculateKnockbackVelocity(thwompPtr_->GetKnockbackPositoin(rect_.pos),thwompPtr_->GetPos());
 		break;
 	default:
 		break;
@@ -111,11 +130,6 @@ void Enemy::Move()
 		velocity_ += accelelation_;
 		move_ += velocity_;
 
-		/*if (rect_.pos.y >= 500 - 32)
-		{
-			rect_.pos.y = 500 - 32;
-			isKnockback_ = false;
-		}*/
 		return;
 	}
 
@@ -166,6 +180,23 @@ void Enemy::UpdateInvincible()
 		isInvincible_ = false;
 		currentCoolTime_ = damageCoolTime_;
 	}
+}
+
+void Enemy::CalculateKnockbackVelocity(const Vector2& _targetPos, const Vector2& _thwompPos)
+{
+	isKnockback_ = true;
+
+	Vector2 toTarget = _targetPos - rect_.pos;
+
+	Vector2 dir = GetDirectionToTarget(_thwompPos, rect_.pos);
+
+
+	const float kBaseDis = 64.0f;
+	float magnification = toTarget.x / kBaseDis;
+	magnification = magnification < 0 ? -magnification : magnification;
+
+	velocity_.x = baseKnockbackVelocity_.x * magnification * dir.x;
+	velocity_.y = baseKnockbackVelocity_.y;
 }
 
 void Enemy::ShowImgui()

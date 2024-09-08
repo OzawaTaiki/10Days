@@ -1,14 +1,11 @@
 #include "EnemyManager.h"
+#include "Thwomp.h"
 
-EnemyManager* EnemyManager::GetInstance()
-{
-	static std::unique_ptr<EnemyManager>enemyManager = std::make_unique< EnemyManager>();
-	return enemyManager.get();
-}
 
-void EnemyManager::Initialize()
+void EnemyManager::Initialize(Thwomp* _thwompPtr)
 {
-	enemis_.clear();
+	enemis_.clear(); 
+	thwompPtr_ = _thwompPtr;
 }
 
 void EnemyManager::Update()
@@ -38,7 +35,7 @@ void EnemyManager::Draw(const sRendering& _rendring)
 void EnemyManager::AddEnemy(const Vector2& _position)
 {
 	enemis_.push_back(std::make_unique<Enemy>());
-	enemis_.back()->Initialize(_position);
+	enemis_.back()->Initialize(_position, thwompPtr_);
 }
 
 void EnemyManager::PositionUpdate()

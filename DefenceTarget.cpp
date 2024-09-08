@@ -4,7 +4,7 @@
 void DefenceTarget::Initialize()
 {
 	Vector2 pos = { 100,500 - 32 };
-	Vector2 size = {64,64};
+	Vector2 size = { 64,128 };
 	rect_.SetValue(pos, size);
 
 	scale_ = { 1,1 };
@@ -13,7 +13,8 @@ void DefenceTarget::Initialize()
 	velocity_ = { 0,0 };
 	accelelation_ = { 0,0.5f };
 
-	knockbackVelocity_ = { 7.0f,-5.0f};
+	baseKnockbackVelocity_ = { 7.0f,-5.0f };
+	knockbackVelocity_ = baseKnockbackVelocity_;
 	isKnockback_ = false;
 	moveSpeed_ = 1.0f;
 	move_ = { 0,0 };

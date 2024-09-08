@@ -3,7 +3,11 @@
 #include "utils.h"
 #include <numbers>
 #include <imgui.h>
+#include <random>
 #include "InGame.h"
+#include "RandomGenerator.h"
+
+#include <stdlib.h>
 
 const char kWindowTitle[] = "GJ";
 
@@ -23,6 +27,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	InGame* inGame = nullptr;
 	inGame = new InGame;
 	inGame->Initialize();
+
+	RandomGenerator* randomGenerator = nullptr;
+	randomGenerator->GetInstance();
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {

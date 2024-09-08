@@ -6,14 +6,15 @@ void InGame::Initialize()
 	camera_= std::make_unique<Camera>();
 	camera_->Initialize();
 
-	enemyManager_ = enemyManager_->GetInstance();
-	enemyManager_->Initialize();
-
-	stage_ = std::make_unique<Stage>();
-	stage_->Initialize();
 
 	thwomp_ = std::make_unique<Thwomp>();
 	thwomp_->Initialize();
+
+	enemyManager_ = enemyManager_->GetInstance();
+	enemyManager_->Initialize(thwomp_.get());
+
+	stage_ = std::make_unique<Stage>();
+	stage_->Initialize();
 
 	defenceTarget_ = std::make_unique<DefenceTarget>();
 	defenceTarget_->Initialize();
@@ -51,8 +52,8 @@ void InGame::Update()
 	enemyManager_->Update();
 	crushingWall_->Update();
 
-	camera_->Update();
-	//TODO: マップチップの読み込み，描画，
+	camera_->Update(thwomp_->IsReady());
+	//TODO: マップチップの読み込み，描画
 	//TODO: マップチップとの衝突判定
 
 	CheckCollisions();
@@ -86,12 +87,11 @@ void InGame::CheckCollisions()
 	Rect wallRect = crushingWall_->GetRect();
 	Rect targetRect = defenceTarget_->GetRect();
 
-	
-
 
 	if (IsCollision(cameraRect, targetRect))
 	{
 		defenceTarget_->OnCollision(CollisoinAttribute::ScreenRect);
+		// TODO : 張っているときは敵に対してノックバックしない（バグ
 	}
 
 	for (auto& enemy : enemyManager_->GetEnemyList())
@@ -135,14 +135,14 @@ void InGame::CheckCollisions()
 	}
 
 	sLine cRectDownEdge = {
-		.sPos = cameraRect.screenVerties[2],
-		.ePos = cameraRect.screenVerties[3],
-		.color = 0xffffffff
+		.sPos = cameraRect.worldVerties[2],
+		.ePos = cameraRect.worldVerties[3]
 	};
 
 	if (IsCollision(thwompRect, cRectDownEdge))
 	{
-		thwomp_->OnCollision();
+		thwomp_->OnCollision(); 
+		thwomp_->OnCollisionToLine(cRectDownEdge);
 	}
 
 	if (stage_->CollisionCheck(thwompRect, thwomp_->GetMove()))
@@ -153,4 +153,20 @@ void InGame::CheckCollisions()
 	{
 		defenceTarget_->OnCollision(CollisoinAttribute::Stage);
 	}
+
+	auto result = thwomp_->GetKnokbackRect();
+	if (result.has_value())
+	{
+		Rect knockBackRect = *result;
+		for (auto& enemy : enemyManager_->GetEnemyList())
+		{
+			enemyRect = enemy->GetRect();
+
+			if (IsCollision(knockBackRect, enemyRect))
+			{
+				enemy->OnCollision(CollisoinAttribute::KnockbacKRect);
+			}
+		}
+	}
+	// TODO : 護衛対象，壁都も判定を 
 }

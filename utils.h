@@ -171,4 +171,6 @@ bool IsCollision(const Rect& _rect1, const Rect& _rect2);
 
 bool IsCollision(const Rect& _rect, const sLine& _line);
 
+Vector2 GetDirectionToTarget(const Vector2& _targetPos, const Vector2& _myPos);
+
 Matrix3x3 operator*(const Matrix3x3& _mat, const Matrix3x3& _mat1);

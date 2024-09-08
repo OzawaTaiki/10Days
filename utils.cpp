@@ -450,14 +450,14 @@ bool IsCollision(const Rect& _rect, const sLine& _line)
 		_line.ePos.y <= _rect.worldVerties[2].y)
 	{
 		if (_line.sPos.x < _line.ePos.x &&
-			_rect.worldVerties[0].x <= _line.sPos.x&&
-			_rect.worldVerties[1].x >= _line.ePos.x)
+			_rect.worldVerties[0].x >= _line.sPos.x&&
+			_rect.worldVerties[1].x <= _line.ePos.x)
 		{
 			return true;
 		}
 		else if (_line.sPos.x > _line.ePos.x &&
-			_rect.worldVerties[0].x <= _line.ePos.x &&
-			_rect.worldVerties[1].x >= _line.sPos.x)
+			_rect.worldVerties[0].x >= _line.ePos.x &&
+			_rect.worldVerties[1].x <= _line.sPos.x)
 		{
 			return true;
 		}
@@ -465,6 +465,28 @@ bool IsCollision(const Rect& _rect, const sLine& _line)
 	}
 
 	return false;
+}
+
+Vector2 GetDirectionToTarget(const Vector2& _targetPos, const Vector2& _myPos)
+{
+	Vector2 result = { 0,0 };
+
+	if (_targetPos.x < _myPos.x)
+		result.x = 1.0f;
+	else if (_targetPos.x > _myPos.x)
+		result.x = -1.0f;
+	else
+		result.x = 0;
+
+
+	if (_targetPos.y < _myPos.y)
+		result.y = 1.0f;
+	else if (_targetPos.y > _myPos.y)
+		result.y = -1.0f;
+	else
+		result.y = 0;
+
+	return result;
 }
 
 Matrix3x3 operator*(const Matrix3x3& _mat, const Matrix3x3& _mat1)
@@ -493,53 +515,49 @@ Matrix3x3 sRendering::GetvpVpMat() const
 	return result;
 }
 
-Vector2 Vector2::operator-()
+Vector2 Vector2::operator-()const
 {
 	return { -this->x,-this->y };
 }
 
-Vector2 Vector2::operator+(const Vector2 _vec)
+Vector2 Vector2::operator+(const Vector2& _vec)const
 {
 	return Add(*this, _vec);
 }
 
-Vector2 Vector2::operator-(const Vector2 _vec)
+Vector2 Vector2::operator-(const Vector2& _vec)const
 {
 	return Subtract(*this, _vec);
 }
 
-Vector2 Vector2::operator*(float _scalar)
+Vector2 Vector2::operator*(float _scalar)const
 {
 	return Multiply(*this, _scalar);
 }
 
-Vector2 Vector2::operator/(float _scalar)
+Vector2 Vector2::operator/(float _scalar)const
 {
 	return {this->x/ _scalar,this->y / _scalar };
 }
 
-Vector2& Vector2::operator+=(const Vector2 _vec)
+void Vector2::operator+=(const Vector2& _vec)
 {
 	*this = *this + _vec;
-	return *this;
 }
 
-Vector2& Vector2::operator-=(const Vector2 _vec)
+void Vector2::operator-=(const Vector2& _vec)
 {
 	*this = *this - _vec;
-	return *this;
 }
 
-Vector2& Vector2::operator*=(float _scalar)
+void Vector2::operator*=(float _scalar)
 {
 	*this = *this * _scalar;
-	return *this;
 }
 
-Vector2& Vector2::operator/=(float _scalar)
+void Vector2::operator/=(float _scalar)
 {
 	*this = *this / _scalar;
-	return *this;
 }
 
 Rect::Rect(const Vector2& _pos, const Vector2& _size) : pos(_pos), size(_size)

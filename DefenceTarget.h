@@ -35,6 +35,7 @@ private:
 
 	Vector2				velocity_;
 	Vector2				accelelation_;
+	Vector2				baseKnockbackVelocity_;
 	Vector2				knockbackVelocity_;
 	bool				isKnockback_;
 

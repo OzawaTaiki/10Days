@@ -16,7 +16,8 @@ void Camera::Initialize()
 
 	moveSpeed_ = 5.0f;
 	
-	screenRect_.SetValue(pos_, size_ / 2.0f);
+	Vector2 rectSize = { 360,640 };
+	screenRect_.SetValue(pos_, rectSize);
 
 	rendering_.worldMatrix = MakeAffineMatrix(scale_, rotate_, pos_);
 	rendering_.viewMatrix = Inverse(rendering_.worldMatrix);
@@ -24,7 +25,7 @@ void Camera::Initialize()
 	rendering_.viewportMatrix = MakeViewportMatrix(0, 0, size_.x, size_.y);
 }
 
-void Camera::Update()
+void Camera::Update(bool _isReady)
 {
 #ifdef _DEBUG
 	ShowImgui();
@@ -48,8 +49,7 @@ void Camera::Update()
 		pos_.y += moveSpeed_;
 	}
 
-	screenRect_.pos = pos_;
-	if (parent_)
+	if (parent_ && _isReady)
 		screenRect_.pos = pos_ + *parent_;
 
 	rendering_.worldMatrix = MakeAffineMatrix(scale_, rotate_, screenRect_.pos);
@@ -59,6 +59,7 @@ void Camera::Update()
 
 	screenRect_.Calculate();
 
+	preIsReady_ = _isReady;
 }
 
 void Camera::Draw(const sRendering& _rendring)
@@ -80,7 +81,7 @@ void Camera::ShowImgui()
 	ImGui::BeginDisabled(true);
 	ImGui::DragFloat2("WorldPos", &screenRect_.pos.x, 1.0f);
 	ImGui::EndDisabled();
-	if (ImGui::DragFloat2("WorldPos", &screenRect_.size.x, 1.0f))
+	if (ImGui::DragFloat2("rectSize", &screenRect_.size.x, 1.0f))
 		screenRect_.SetValue(pos_, screenRect_.size);
 	ImGui::DragFloat("MoveSpeed", &moveSpeed_, 1.0f);
 	ImGui::End();

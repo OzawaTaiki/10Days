@@ -1,15 +1,18 @@
-#pragma once
+﻿#pragma once
 #include "Enemy.h"
 #include "utils.h"
 #include <list>
 #include <memory>
+#include <mutex>
+
+class Thwomp;
 
 class EnemyManager
 {
 public:
-	static EnemyManager* GetInstance();
+	static EnemyManager* GetInstance() { static EnemyManager instance; return &instance; };
 
-	void Initialize();
+	void Initialize(Thwomp* _thwompPtr);
 	void Update();
 	void Draw(const sRendering& _rendring);
 
@@ -20,6 +23,11 @@ public:
 
 private:
 
-	std::list< std::unique_ptr<Enemy>> enemis_;
+	EnemyManager() = default;
 
+	EnemyManager(const EnemyManager&) = delete;
+	EnemyManager& operator=(const EnemyManager&) = delete;
+
+	std::list< std::unique_ptr<Enemy>> enemis_;
+	Thwomp* thwompPtr_;
 };
