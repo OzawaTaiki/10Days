@@ -123,8 +123,10 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="InGame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RandomGenerator.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Thwomp.cpp" />
+    <ClCompile Include="Title.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -165,8 +167,11 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="Matrix3x3.h" />
     <ClInclude Include="RandomGenerator.h" />
     <ClInclude Include="Rendering.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Thwomp.h" />
+    <ClInclude Include="Title.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

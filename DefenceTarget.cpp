@@ -1,5 +1,6 @@
 ﻿#include "DefenceTarget.h"
 #include "ImGuiManager.h"
+#include "Thwomp.h"
 
 void DefenceTarget::Initialize()
 {
@@ -93,10 +94,18 @@ void DefenceTarget::OnCollision(CollisoinAttribute _attribute)
 			velocity_.y = 0;
 			isKnockback_ = false;
 		}
+		break; 
+	case CollisoinAttribute::KnockbacKRect:
+		CalculateKnockbackVelocity(thwompPtr_->GetKnockbackPositoin(rect_.pos), thwompPtr_->GetPos());
 		break;
 	default:
 		break;
 	}
+}
+
+void DefenceTarget::SetThwompPtr(Thwomp* _thwompPtr)
+{
+	thwompPtr_ = _thwompPtr;
 }
 
 void DefenceTarget::PositionUpdate()
@@ -112,10 +121,12 @@ void DefenceTarget::Move()
 	{
 		velocity_ += accelelation_;
 		move_ += velocity_;
+		scale_ = { 0.8f,1.1f };
 		return;
 	}
 
 
+	scale_ = { 1.0f,1.0f };
 	if (!canMoving_ || !Im_isMove_ )
 		return;
 
@@ -146,7 +157,7 @@ void DefenceTarget::Damage()
 
 void DefenceTarget::Knockback(const Vector2& _velocity )
 {
-	if (isKnockback_)
+	if (isKnockback_ )
 		return;
 
 	isKnockback_ = true;
@@ -163,6 +174,21 @@ void DefenceTarget::UpdateInvincible()
 		isInvincible_ = false;
 		currentCoolTime_ = damageCoolTime_;
 	}
+}
+
+void DefenceTarget::CalculateKnockbackVelocity(const Vector2& _targetPos, const Vector2& _thwompPos)
+{
+	if (!thwompPtr_->CanKnockback())
+		return;
+
+	isKnockback_ = true;
+	Vector2 toTarget = _targetPos - rect_.pos;
+	Vector2 dir = GetDirectionToTarget(_thwompPos, rect_.pos);
+	const float kBaseDis = 64.0f;
+	float magnification = toTarget.x / kBaseDis;
+	magnification = magnification < 0 ? -magnification : magnification;
+	velocity_.x = baseKnockbackVelocity_.x * magnification * dir.x;
+	velocity_.y = baseKnockbackVelocity_.y;
 }
 
 void DefenceTarget::ShowImgui()

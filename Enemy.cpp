@@ -129,10 +129,12 @@ void Enemy::Move()
 	{
 		velocity_ += accelelation_;
 		move_ += velocity_;
+		scale_ = { 0.8f,1.1f };
 
 		return;
 	}
 
+	scale_ = { 1.0f,1.0f };
 	if (!canMoving_ || !Im_isMove_)
 		return;
 
@@ -163,7 +165,7 @@ void Enemy::Damage()
 
 void Enemy::Knockback(const Vector2& _velocity)
 {
-	if (isKnockback_)
+	if (isKnockback_ )
 		return;
 
 	isKnockback_ = true;
@@ -184,6 +186,9 @@ void Enemy::UpdateInvincible()
 
 void Enemy::CalculateKnockbackVelocity(const Vector2& _targetPos, const Vector2& _thwompPos)
 {
+	if (!thwompPtr_->CanKnockback())
+		return;
+
 	isKnockback_ = true;
 
 	Vector2 toTarget = _targetPos - rect_.pos;
@@ -197,7 +202,7 @@ void Enemy::CalculateKnockbackVelocity(const Vector2& _targetPos, const Vector2&
 
 	velocity_.x = baseKnockbackVelocity_.x * magnification * dir.x;
 	velocity_.y = baseKnockbackVelocity_.y;
-}
+};
 
 void Enemy::ShowImgui()
 {

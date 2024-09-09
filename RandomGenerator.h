@@ -1,14 +1,14 @@
 ﻿#pragma once
 
+#include "Vector2.h"
 #include <random>
-#include <memory>
-#include <mutex>
 
 class RandomGenerator {
 public:
     static RandomGenerator* GetInstance() { static RandomGenerator instance; return &instance; };
 
     int GetUniformInt(int min, int max);
+    Vector2 GetUniformVec2(float _min, float _max);
     double GetUniformDouble();
 
 private:

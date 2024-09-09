@@ -83,6 +83,12 @@
     <ClCompile Include="RandomGenerator.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -195,5 +201,8 @@
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="RandomGenerator.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Title.h" />
   </ItemGroup>
 </Project>

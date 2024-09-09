@@ -8,7 +8,7 @@
 void Thwomp::Initialize()
 {
 	Vector2 pos = { 100,200 };
-	Vector2 size = { 192,256 };
+	Vector2 size = { 96,128 };
 	rect_.SetValue(pos, size);
 
 	Vector2 margin = { 64,0 };
@@ -19,6 +19,12 @@ void Thwomp::Initialize()
 	knockbackRect_.SetValue(pos, knockbackSize_[0]);
 	charge_ = 0;
 	frameCountForCharge_ = 0;
+
+	//溜め時間
+	chargeThreshold_[0] = 120;
+	chargeThreshold_[1] = 180;
+	chargeThreshold_[2] = 65535;
+
 	scale_ = { 1,1 };
 	rotate_ = 0;
 
@@ -78,9 +84,23 @@ void Thwomp::Draw(const sRendering& _rendring)
 
 }
 
-void Thwomp::OnCollision()
+void Thwomp::OnCollision(CollisoinAttribute _attribute)
 {
-	endFalling_ = true;
+	switch (_attribute)
+	{
+	case CollisoinAttribute::Stage:
+		canKnockBack_ = true;
+	case CollisoinAttribute::DefenceTarget:
+	case CollisoinAttribute::ScreenRect:
+	case CollisoinAttribute::Enemy:
+		if (isFalling_)
+			endFalling_ = true;
+		break;
+	case CollisoinAttribute::KnockbacKRect:
+	default:
+		break;
+	}
+
 }
 
 void Thwomp::OnCollisionToLine(const sLine& _line)
@@ -134,11 +154,10 @@ void Thwomp::StartFalling()
 {
 	isCharging_ = false;
 	isFalling_ = true;
-	frameCountForCharge_ = 0;
 
 	prePos_= rect_.pos;
 
-	// TODO: チャージカウントによってサイズ決める
+	frameCountForCharge_ = 0;
 
 	color_ = 0x00ff00ff;
 }
@@ -146,7 +165,7 @@ void Thwomp::StartFalling()
 void Thwomp::StartReturning()
 {
 	isFalling_ = false;
-	endFalling_ = false;
+	isReturning_ = true;
 
 	color_ = 0x0000ffff;
 }
@@ -191,6 +210,7 @@ void Thwomp::Falling()
 
 void Thwomp::Returning()
 {
+	endFalling_ = false;
 	rect_.pos.y += -3.0f;
 }
 
@@ -208,6 +228,16 @@ void Thwomp::ReadyState()
 void Thwomp::ChargingState()
 {
 	frameCountForCharge_++;
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (frameCountForCharge_ >= chargeThreshold_[i])
+			continue;
+
+		charge_ = i;
+		break;
+	}
+
 
 	if (isCharging_ && !input_->PushKey(DIK_SPACE))
 	{
@@ -246,9 +276,11 @@ void Thwomp::ShowImgui()
 	ImGui::DragFloat("moveSpeed", &moveSpeed_, 0.1f);
 	ImGui::DragFloat("fallSpeed", &fallSpeed_, 0.1f);
 	ImGui::DragFloat2("move", &move_.x, 0.1f);
+	ImGui::Text(" ready : %s", isReady_? "true" : "false");
 	ImGui::Text("charging : %s", isCharging_? "true" : "false");
 	ImGui::Text(" falling : %s", isFalling_ ? "true" : "false");
 	ImGui::Text(" endFall : %s", endFalling_? "true" : "false");
+	ImGui::Text(" Returning : %s", isReturning_? "true" : "false");
 	ImGui::InputInt("charge", reinterpret_cast<int*>(&charge_));
 	ImGui::End();
 }

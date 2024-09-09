@@ -6,8 +6,7 @@
 #include <random>
 #include "InGame.h"
 #include "RandomGenerator.h"
-
-#include <stdlib.h>
+#include "SceneManager.h"
 
 const char kWindowTitle[] = "GJ";
 
@@ -24,9 +23,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char keys[256] = {0};
 	char preKeys[256] = {0};
 
-	InGame* inGame = nullptr;
-	inGame = new InGame;
-	inGame->Initialize();
+
+	SceneManager* sceneManager = nullptr;
+	sceneManager = SceneManager::GetInstance();
+	sceneManager->Initialize(sceneName::Title);
 
 	RandomGenerator* randomGenerator = nullptr;
 	randomGenerator->GetInstance();
@@ -46,7 +46,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
-		inGame->Update();
+		sceneManager->Update();
 
 		///
 		/// ↑更新処理ここまで
@@ -56,7 +56,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		inGame->Draw();
+		sceneManager->Draw();
 
 		///
 		/// ↑描画処理ここまで

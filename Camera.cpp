@@ -1,6 +1,7 @@
-#include "camera.h"
+﻿#include "camera.h"
 #include "Input.h"
 #include "ImGuiManager.h"
+#include "RandomGenerator.h"
 
 void Camera::Initialize()
 {
@@ -14,10 +15,14 @@ void Camera::Initialize()
 
 	rotate_ = 0;
 
-	moveSpeed_ = 5.0f;
+	moveSpeed_ = 8.0f;
 	
 	Vector2 rectSize = { 360,640 };
 	screenRect_.SetValue(pos_, rectSize);
+
+	isShake_ = false;
+	baseShakeCount_ = 30;
+	currentShakeCount_ = baseShakeCount_;
 
 	rendering_.worldMatrix = MakeAffineMatrix(scale_, rotate_, pos_);
 	rendering_.viewMatrix = Inverse(rendering_.worldMatrix);
@@ -25,11 +30,10 @@ void Camera::Initialize()
 	rendering_.viewportMatrix = MakeViewportMatrix(0, 0, size_.x, size_.y);
 }
 
-void Camera::Update(bool _isReady)
+void Camera::Update(bool _isFalling, bool _isReturning,bool _endFall)
 {
 #ifdef _DEBUG
 	ShowImgui();
-#endif // _DEBUG
 
 
 	if (Input::GetInstance()->PushKey(DIK_LEFT))
@@ -48,18 +52,64 @@ void Camera::Update(bool _isReady)
 	{
 		pos_.y += moveSpeed_;
 	}
+#endif // _DEBUG
 
-	if (parent_ && _isReady)
-		screenRect_.pos = pos_ + *parent_;
 
-	rendering_.worldMatrix = MakeAffineMatrix(scale_, rotate_, screenRect_.pos);
+	Vector2 move = { 0,0 };
+
+	if (_isFalling)
+	{
+		if (Input::GetInstance()->PushKey(DIK_W))
+
+		{
+			move.y -= moveSpeed_;
+		}
+		if (Input::GetInstance()->PushKey(DIK_S))
+		{
+			move.y += moveSpeed_;
+		}
+
+		if (move.y != 0)
+		{
+			screenRect_.pos += move;
+
+			downLine_.sPos += move;
+			downLine_.ePos += move;
+		}
+	}
+	// 落下してないとき
+	else
+	{
+		if (_isReturning)
+		{
+			screenRect_.pos = lerp(screenRect_.pos, *parent_, 0.1f);
+		}
+		else
+		{
+			screenRect_.pos = lerp(screenRect_.pos, *parent_, 0.1f);
+			//screenRect_.pos = pos_ + *parent_;
+			//returnPos_ = screenRect_.pos;
+
+			downLine_.sPos = screenRect_.worldVerties[2];
+			downLine_.ePos = screenRect_.worldVerties[3];
+		}
+	}
+
+	if (_endFall)
+		isShake_ = true;
+
+	Shaking();
+
+	if (isShake_)
+		rendering_.worldMatrix = MakeAffineMatrix(scale_, rotate_, screenRect_.pos + shake_);
+	else
+		rendering_.worldMatrix = MakeAffineMatrix(scale_, rotate_, screenRect_.pos);
 	rendering_.viewMatrix = Inverse(rendering_.worldMatrix);
 	rendering_.orthoMatrix = MakeOrthographicMatrix(-kWindowWidth_ / 2, -kWindowHeight_ / 2, kWindowWidth_ / 2, kWindowHeight_ / 2);
 	rendering_.viewportMatrix = MakeViewportMatrix(0, 0, size_.x, size_.y);
 
 	screenRect_.Calculate();
 
-	preIsReady_ = _isReady;
 }
 
 void Camera::Draw(const sRendering& _rendring)
@@ -74,6 +124,21 @@ void Camera::Draw(const sRendering& _rendring)
 	Novice::DrawBox((int)drawpos.x, (int)drawpos.y, (int)screenRect_.size.x, (int)screenRect_.size.y, 0, 0x000000ff, kFillModeWireFrame);
 }
 
+void Camera::Shaking()
+{
+	if (!isShake_)
+		return;
+
+	if (currentShakeCount_ <= 0)
+	{
+		currentShakeCount_ = baseShakeCount_;
+		isShake_ = false;
+	}
+
+	--currentShakeCount_;
+	shake_ = RandomGenerator::GetInstance()->GetUniformVec2(-5.0f, 5.0f);
+}
+
 void Camera::ShowImgui()
 {
 	ImGui::Begin("Camera");
@@ -84,6 +149,7 @@ void Camera::ShowImgui()
 	if (ImGui::DragFloat2("rectSize", &screenRect_.size.x, 1.0f))
 		screenRect_.SetValue(pos_, screenRect_.size);
 	ImGui::DragFloat("MoveSpeed", &moveSpeed_, 1.0f);
+	ImGui::InputInt("shakeTime", &baseShakeCount_);
 	ImGui::End();
 }
 

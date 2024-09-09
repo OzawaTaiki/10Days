@@ -6,15 +6,16 @@
 #include "Stage.h"
 #include "EnemyManager.h"
 #include "utils.h"
+#include "Scene.h"
 #include <memory>
 #include <vector>
 
-class InGame
+class InGame : public Scene
 {
 public:
-	void Initialize();
-	void Update();
-	void Draw();
+	void Initialize() override;
+	void Update() override;
+	void Draw() override;
 
 private:
 	void CheckCollisions();
@@ -29,7 +30,4 @@ private:
 	std::unique_ptr<Thwomp>							thwomp_;
 	std::unique_ptr<CrushingWall>					crushingWall_;
 	std::unique_ptr<DefenceTarget>					defenceTarget_;
-
-
-
 };

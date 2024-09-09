@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "utils.h"
 #include "CollisionAtrribute.h"
-
+class Thwomp;
 
 class DefenceTarget
 {
@@ -18,6 +18,7 @@ public:
 	Rect GetRect() const { return rect_; };
 	CollisoinAttribute GetCollisoinAttribute() { return CollisoinAttribute::DefenceTarget; }
 
+	void SetThwompPtr(Thwomp* _thwompPtr);
 	void PositionUpdate();
 
 private:
@@ -26,7 +27,7 @@ private:
 	void Damage();
 	void Knockback(const Vector2& _velocity);
 	void UpdateInvincible();
-
+	void CalculateKnockbackVelocity(const Vector2& _targetPos, const Vector2& _thwompPos);
 
 	Rect				rect_;
 	Vector2				scale_;
@@ -53,6 +54,7 @@ private:
 	int					textureHandle_;
 	unsigned int		color_;
 
+	Thwomp*				thwompPtr_;
 
 	bool Im_isMove_;
 

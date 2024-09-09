@@ -8,6 +8,8 @@ public:
 	void Update();
 	void Draw(const sRendering& _rendring);
 
+	void OnCollision(size_t _charge);
+
 	Rect GetRect() { return rect_; }
 
 private:
@@ -18,6 +20,8 @@ private:
 	float					rotate_;
 
 	float					moveSpeed_;
+
+	float					returnValue_[3];
 
 	int						textureHandle_;
 	unsigned int			color_;
