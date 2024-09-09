@@ -41,6 +41,8 @@ void InGame::Update()
 	defenceTarget_->PositionUpdate();
 	enemyManager_->PositionUpdate();
 
+	if (!defenceTarget_->Isalive())
+		isChange_ = true;
 }
 
 void InGame::Draw()

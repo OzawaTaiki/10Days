@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include "InGame.h"
 #include "Title.h"
+#include "Result.h"
 
 void SceneManager::Initialize(sceneName _startScene)
 {
@@ -16,6 +17,7 @@ void SceneManager::Initialize(sceneName _startScene)
 		currentScenePtr_ = new InGame();
 		break;
 	case sceneName::Result:
+		currentScenePtr_ = new Result();
 		break;
 	default:
 		break;
@@ -35,10 +37,10 @@ void SceneManager::Update()
 			ReserveScene(sceneName::Game);
 			break;
 		case sceneName::Game:
-			ReserveScene(sceneName::Title);
+			ReserveScene(sceneName::Result);
 			break;
 		case sceneName::Result:
-			ReserveScene(sceneName::Game);
+			ReserveScene(sceneName::Title);
 			break;
 		default:
 			break;
@@ -77,6 +79,7 @@ void SceneManager::ChangeScene()
 		currentScenePtr_ = new InGame();
 		break;
 	case sceneName::Result:
+		currentScenePtr_ = new Result();
 		break;
 	default:
 		break;

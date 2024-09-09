@@ -123,6 +123,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="InGame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RandomGenerator.cpp" />
+    <ClCompile Include="Result.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Thwomp.cpp" />
@@ -167,6 +168,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="Matrix3x3.h" />
     <ClInclude Include="RandomGenerator.h" />
     <ClInclude Include="Rendering.h" />
+    <ClInclude Include="Result.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Stage.h" />
