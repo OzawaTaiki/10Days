@@ -49,6 +49,7 @@ private:
 	bool							completeTransition_			= true;
 
 	uint32_t score_ = 0;
+	int returnValue_ = 0;
 
 	SceneManager(const SceneManager& _sceneManager) = delete;
 	SceneManager& operator=(const SceneManager& _sceneManager) = delete;

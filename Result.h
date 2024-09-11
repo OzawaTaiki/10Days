@@ -14,7 +14,7 @@ public:
 	void Update() override;
 	void Draw() override;
 
-
+	int GetNextValue_(){ return hitValue_; };
 private:
 
 	float sinValue_[2];

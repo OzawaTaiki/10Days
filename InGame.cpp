@@ -4,6 +4,12 @@
 
 #include "Input.h"
 
+InGame::~InGame()
+{
+	// ゲームシーンのところでフェードし始めて
+	// ここでBGMとか止めるといいと思う。ｼﾗﾝｹﾄﾞ
+}
+
 void InGame::Initialize()
 {
 	camera_= std::make_unique<Camera>();
@@ -31,8 +37,6 @@ void InGame::Initialize()
 	camera_->SetMovableRange({ 0,0, },range);
 	camera_->SetParent(thwomp_->GetPositoinPtr());
 	defenceTarget_->SetThwompPtr(thwomp_.get());
-
-
 }
 
 void InGame::Update()
