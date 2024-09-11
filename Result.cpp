@@ -24,14 +24,20 @@ void Result::Initialize()
 
 	count_[0] = 0;
 	count_[1] = 0;
+
+	scoreDrawPos_ = { 864,64 };
 }
 
 void Result::Update()
 {
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE) || Input::GetInstance()->IsTriggerMouse(0))
-		isChange_ = true;
 
-	hitValue_ = 0;
+#ifdef _DEBUG
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+#endif // _DEBUG
+		Input::GetInstance()->IsTriggerMouse(0) && hitValue_ != -1)
+			isChange_ = true;
+		else
+			hitValue_ = -1;
 	for (int i = 0; i < 2; i++)
 	{
 		if (IsCollisionWithMouse(pos_[i], defaultSize_))
@@ -60,6 +66,8 @@ void Result::Draw()
 	ImGui::DragFloat("continue_scale", &scale_[0], 0.1f);
 	ImGui::DragFloat2("toTitle", &pos_[1].x, 1.0f);
 	ImGui::DragFloat("toTitle_scale", &scale_[1], 0.1f);
+	ImGui::DragFloat2("score_pos", &scoreDrawPos_.x, 1.0f);
+	ImGui::DragFloat("score_scale", &scoreDrawScale_, 0.1f);
 	ImGui::End();
 
 #endif // _DEBUG
@@ -72,5 +80,5 @@ void Result::Draw()
 
 	Novice::DrawSprite((int)drawpos[0].x, (int)drawpos[0].y, Button_continue_, scale_[0], scale_[0], 0, WHITE);
 	Novice::DrawSprite((int)drawpos[1].x, (int)drawpos[1].y, Button_toTitle_, scale_[1], scale_[1], 0, WHITE);
-	DrawDigit(score_, { 100,100 }, 255);
+	DrawDigit(score_, scoreDrawPos_, 255, scoreDrawScale_);
 }

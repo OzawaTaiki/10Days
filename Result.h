@@ -21,6 +21,8 @@ private:
 	float count_[2];
 
 	uint32_t score_;
+	Vector2 scoreDrawPos_ = {};
+	float scoreDrawScale_ = 1.0f;
 
 	int hitValue_;
 
