@@ -1,11 +1,11 @@
 ﻿#include "utils.h"
 
-float lerp(float& t, float max, float min)
+float Lerp(float t, float max, float min)
 {
 	return (1.0f - t) * min + t * max;
 }
 
-Vector2 lerp(Vector2 min, Vector2 max, float t)
+Vector2 Lerp(Vector2 min, Vector2 max, float t)
 {
 	Vector2 result;
 
@@ -17,9 +17,9 @@ Vector2 lerp(Vector2 min, Vector2 max, float t)
 
 Vector2 Bezier(const Vector2& p0, const Vector2& p1, const Vector2& p2, float t)
 {
-	Vector2 p01 = lerp(p0, p1, t);
-	Vector2 p12 = lerp(p1, p2, t);
-	Vector2 p = lerp(p01, p12, t);
+	Vector2 p01 = Lerp(p0, p1, t);
+	Vector2 p12 = Lerp(p1, p2, t);
+	Vector2 p = Lerp(p01, p12, t);
 
 	return p;
 }
@@ -465,6 +465,32 @@ bool IsCollision(const Rect& _rect, const sLine& _line)
 	}
 
 	return false;
+}
+
+bool IsCollision(const Rect& _rect, const Vector2& _point)
+{
+	if (_rect.worldVerties[0].x <= _point.x &&
+		_rect.worldVerties[1].x >= _point.x &&
+		_rect.worldVerties[0].y <= _point.y &&
+		_rect.worldVerties[2].y >= _point.y)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool IsCollisionWithMouse(const Vector2& _pos, const Vector2& _size)
+{
+	int x, y;
+	Novice::GetMousePosition(&x, &y);
+
+	Rect rect;
+	rect.SetValue(_pos, _size);
+
+	Vector2 mousePos(x, y);
+
+	return IsCollision(rect, mousePos);
 }
 
 Vector2 GetDirectionToTarget(const Vector2& _targetPos, const Vector2& _myPos)

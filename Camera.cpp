@@ -82,11 +82,11 @@ void Camera::Update(bool _isFalling, bool _isReturning,bool _endFall)
 	{
 		if (_isReturning)
 		{
-			screenRect_.pos = lerp(screenRect_.pos, *parent_, 0.1f);
+			screenRect_.pos = Lerp(screenRect_.pos, *parent_, 0.1f);
 		}
 		else
 		{
-			screenRect_.pos = lerp(screenRect_.pos, *parent_, 0.1f);
+			screenRect_.pos = Lerp(screenRect_.pos, *parent_, 0.1f);
 			//screenRect_.pos = pos_ + *parent_;
 			//returnPos_ = screenRect_.pos;
 
@@ -156,7 +156,7 @@ void Camera::SetParent(Vector2* _parent)
 
 void Camera::StartStagingFromTitle(bool _endFall)
 {
-	screenRect_.pos = lerp(screenRect_.pos, *parent_, 0.1f);
+	screenRect_.pos = Lerp(screenRect_.pos, *parent_, 0.1f);
 
 	if (_endFall)
 		isShake_ = true;

@@ -14,7 +14,7 @@
 class InGame : public Scene
 {
 public:
-	InGame(bool _fromTitle) :fromTitle_(_fromTitle) {};
+	~InGame();
 
 	void Initialize() override;
 	void Update() override;
@@ -41,6 +41,5 @@ private:
 	std::unique_ptr<DefenceTarget>					defenceTarget_;
 	std::unique_ptr<BackGround>						backGround_;
 
-	bool fromTitle_;
 	uint32_t score_;
 };

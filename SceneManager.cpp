@@ -24,7 +24,7 @@ void SceneManager::Initialize(sceneName _startScene, const Vector2& _windowSize)
 		currentScenePtr_ = new FromTitle();
 		break;
 	case sceneName::Game:
-		currentScenePtr_ = new InGame(previous_ == sceneName::Title);
+		currentScenePtr_ = new InGame();
 		break;
 	case sceneName::Result:
 		currentScenePtr_ = new Result(0);
@@ -66,7 +66,11 @@ void SceneManager::Update()
 			ReserveScene(sceneName::Result);
 			break;
 		case sceneName::Result:
-			ReserveScene(sceneName::Title);
+			returnValue_ = dynamic_cast<Result*>(currentScenePtr_)->GetNextValue_();
+			if (returnValue_ == 0)
+				ReserveScene(sceneName::Game);
+			else
+				ReserveScene(sceneName::Title);
 			break;
 		default:
 			break;
@@ -104,7 +108,7 @@ void SceneManager::ChangeScene()
 		currentScenePtr_ = new FromTitle();
 		break;
 	case sceneName::Game:
-		currentScenePtr_ = new InGame(previous_ == sceneName::Title);
+		currentScenePtr_ = new InGame();
 		break;
 	case sceneName::Result:
 		currentScenePtr_ = new Result(score_);
