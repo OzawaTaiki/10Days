@@ -45,7 +45,6 @@ void DefenceTarget::Update()
 	UpdateInvincible();
 
 	canMoving_ = false;
-
 }
 
 void DefenceTarget::Draw(const sRendering& _rendring)
@@ -79,12 +78,12 @@ void DefenceTarget::OnCollision(CollisoinAttribute _attribute)
 		canMoving_ = true;
 		break;
 	case CollisoinAttribute::CrushingWall:
-		Damage();
 		Knockback(knockbackVelocity_);
+		Damage();
 		break;
 	case CollisoinAttribute::Enemy:
-		Damage();
 		Knockback({ -knockbackVelocity_.x,knockbackVelocity_.y });
+		Damage();
 		break;
 	case CollisoinAttribute::Stage:
 		if (move_.x == 0)
@@ -158,11 +157,12 @@ void DefenceTarget::Damage()
 
 void DefenceTarget::Knockback(const Vector2& _velocity )
 {
-	if (isKnockback_ )
+	if (isKnockback_ || isInvincible_)
 		return;
 
 	isKnockback_ = true;
 	velocity_ = _velocity;
+	move_ += velocity_;
 }
 
 void DefenceTarget::UpdateInvincible()

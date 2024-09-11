@@ -117,13 +117,26 @@ void Camera::Update(bool _isFalling, bool _isReturning,bool _endFall)
 
 void Camera::Draw(const sRendering& _rendring)
 {
-	Vector2 drawpos = screenRect_.pos - screenRect_.size / 2.0f;
+	Vector2 drawpos = screenRect_.pos;
 	//Matrix3x3 wMat = MakeAffineMatrix(scale_, rotate_, drawpos);
 	Matrix3x3 vpvpMat = _rendring.GetvpVpMat();
 
 	drawpos = Transform(drawpos, vpvpMat);
 
+	Vector2 vertex[4];
+	getVertex4(vertex, screenRect_.size);
+	for (int i = 0; i < 4; i++)
+		vertex[i] += drawpos;
+
+	DrawAABB({ 0,0 }, vertex[2],0xa0);
+	DrawAABB({ 0,720 }, vertex[3],0xa0);
+	DrawAABB({ 1280,0 }, vertex[0],0xa0);
+	DrawAABB({ 1280,720 }, vertex[1],0xa0);
+
+#ifdef _DEBUG
 	Novice::DrawBox((int)drawpos.x, (int)drawpos.y, (int)screenRect_.size.x, (int)screenRect_.size.y, 0, 0x000000ff, kFillModeWireFrame);
+#endif // _DEBUG
+
 }
 
 void Camera::SetParent(Vector2* _parent)

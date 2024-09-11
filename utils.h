@@ -1,11 +1,11 @@
 ﻿#pragma once
-#include <math.h>
-#include <assert.h>
 #include <Novice.h>
 #include "Vector2.h"
 #include "Matrix3x3.h"
 #include "Rendering.h"
 #include <cstdint>
+#include <cmath>
+#include <cassert> 
 #include <vector>
 
 const int kColumnWidth = 64;
@@ -183,5 +183,7 @@ Matrix3x3 operator*(const Matrix3x3& _mat, const Matrix3x3& _mat1);
 std::vector<uint32_t> SplitDigit(uint32_t _num);
 
 void DrawDigit(uint32_t _num, const Vector2& _pos, uint32_t _color, float _scale = 1.0f);
+
+void DrawAABB(const Vector2& _sPos, const Vector2& _ePos, unsigned int _color);
 
 void LoadNumSprite();

@@ -27,8 +27,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	SceneManager* sceneManager = nullptr;
 	sceneManager = SceneManager::GetInstance();
-	sceneManager->Initialize(sceneName::Title);
-	//sceneManager->Initialize(sceneName::Game);
+	//sceneManager->Initialize(sceneName::Title);
+	sceneManager->Initialize(sceneName::Game);
 
 	RandomGenerator* randomGenerator = nullptr;
 	randomGenerator->GetInstance();

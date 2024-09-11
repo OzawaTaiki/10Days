@@ -527,6 +527,14 @@ void DrawDigit(uint32_t _num, const Vector2& _pos, uint32_t _color, float _scale
 	}
 }
 
+void DrawAABB(const Vector2& _sPos, const Vector2& _ePos, unsigned int _color)
+{
+	Vector2 spos = _sPos.Ceil();
+	Vector2 epos = _ePos.Ceil();
+	Vector2 size = epos- spos;
+	Novice::DrawBox((int)spos.x, (int)spos.y, (int)size.x, (int)size.y, 0, _color, kFillModeSolid);
+}
+
 void LoadNumSprite()
 {
 	numSprite[0] =
@@ -636,6 +644,14 @@ void Vector2::operator*=(float _scalar)
 void Vector2::operator/=(float _scalar)
 {
 	*this = *this / _scalar;
+}
+
+Vector2 Vector2::Ceil() const
+{
+	Vector2 result;
+	result.x = std::ceilf(this->x);
+	result.y = std::ceilf(this->y);
+	return result;
 }
 
 Rect::Rect(const Vector2& _pos, const Vector2& _size) : pos(_pos), size(_size)

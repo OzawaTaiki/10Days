@@ -60,7 +60,6 @@ void InGame::Draw()
 
 #ifdef _DEBUG
 	DrawAxis(re);
-	camera_->Draw(re);
 #endif // _DEBUG
 
 	backGround_->Draw(re);
@@ -69,6 +68,7 @@ void InGame::Draw()
 	enemyManager_->Draw(re);
 	defenceTarget_->Draw(re);
 	crushingWall_->Draw(re);
+	camera_->Draw(re);
 
 	DrawScore();
 }
