@@ -29,8 +29,8 @@ void DefenceTarget::Initialize()
 	currentCoolTime_ = damageCoolTime_;
 	isInvincible_ = false;
 
-	textureHandle_ = 0;
-	color_ = 0x00ffffff;
+	textureHandle_ = Novice::LoadTexture("./Resources/Images/princess.png");
+	color_ = 0xffffffff;
 
 	Im_isMove_ = true;
 }
@@ -62,7 +62,7 @@ void DefenceTarget::Draw(const sRendering& _rendring)
 					 (int)rect_.screenVerties[1].x, (int)rect_.screenVerties[1].y,
 					 (int)rect_.screenVerties[2].x, (int)rect_.screenVerties[2].y,
 					 (int)rect_.screenVerties[3].x, (int)rect_.screenVerties[3].y,
-					 0, 0, (int)rect_.size.x, (int)rect_.size.y,
+					 int(rect_.size.x * textureIndex_), int(0), (int)rect_.size.x, (int)rect_.size.y, 
 					 textureHandle_, color_);
 }
 
@@ -135,6 +135,7 @@ void DefenceTarget::Move()
 		velocity_.y = 15.0f;
 	move_.x += moveSpeed_;
 	move_.y += velocity_.y;
+	Animation();
 }
 
 void DefenceTarget::Damage()
@@ -191,8 +192,21 @@ void DefenceTarget::CalculateKnockbackVelocity(const Vector2& _targetPos, const 
 	velocity_.y = baseKnockbackVelocity_.y;
 }
 
+void DefenceTarget::Animation()
+{
+	currentAnimationCount_++;
+	if (currentAnimationCount_ % animationFrame_ == 0)
+	{
+		textureIndex_++;
+		if (textureIndex_ > 2)
+			textureIndex_ = 0;
+	}
+}
+
 void DefenceTarget::ShowImgui()
 {
+#ifdef _DEBUG
+
 	ImGui::Begin("DefenceTarget");
 	ImGui::DragFloat2("position", &rect_.pos.x, 1.0f);
 	ImGui::DragFloat("speed", &moveSpeed_,0.1f);
@@ -203,5 +217,7 @@ void DefenceTarget::ShowImgui()
 	ImGui::Text("invincble : %s\tcount:%d", isInvincible_ ? "true" : "false", currentCoolTime_);
 	ImGui::Text("isAlive : %s", isAlive_ ? "true" : "false");
 	ImGui::Checkbox("isMove", &Im_isMove_);
+	ImGui::InputInt("animationFrame", &animationFrame_);
 	ImGui::End();
+#endif // _DEBUG
 }

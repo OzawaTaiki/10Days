@@ -1,14 +1,16 @@
 ﻿#include "InGame.h"
 #include "CollisionAtrribute.h"
+#include "ImGuiManager.h"
+
+#include "Input.h"
 
 void InGame::Initialize()
 {
 	camera_= std::make_unique<Camera>();
 	camera_->Initialize();
 
-
 	thwomp_ = std::make_unique<Thwomp>();
-	thwomp_->Initialize();
+	thwomp_->Initialize({ 640,100 });
 
 	enemyManager_ = enemyManager_->GetInstance();
 	enemyManager_->Initialize(thwomp_.get());
@@ -19,11 +21,18 @@ void InGame::Initialize()
 	defenceTarget_ = std::make_unique<DefenceTarget>();
 	defenceTarget_->Initialize();
 
+	backGround_ = std::make_unique < BackGround>();
+	backGround_->Initialize();
+
 	crushingWall_ = std::make_unique<CrushingWall>();
 	crushingWall_->Initialize();
 
+	Vector2 range = stage_->GetMapSize() * stage_->GetMapchipSize();
+	camera_->SetMovableRange({ 0,0, },range);
 	camera_->SetParent(thwomp_->GetPositoinPtr());
 	defenceTarget_->SetThwompPtr(thwomp_.get());
+
+
 }
 
 void InGame::Update()
@@ -41,7 +50,7 @@ void InGame::Update()
 	defenceTarget_->PositionUpdate();
 	enemyManager_->PositionUpdate();
 
-	if (!defenceTarget_->Isalive())
+	if (!defenceTarget_->Isalive() || Input::GetInstance()->TriggerKey(DIK_RETURN))
 		isChange_ = true;
 }
 
@@ -49,15 +58,19 @@ void InGame::Draw()
 {
 	sRendering re = camera_->GetRenderringMatrix();
 
+#ifdef _DEBUG
 	DrawAxis(re);
-	//DrawHorizontalLineAtY(500, re);
-
-	stage_->Draw(re);
 	camera_->Draw(re);
+#endif // _DEBUG
+
+	backGround_->Draw(re);
+	stage_->Draw(re);
 	thwomp_->Draw(re);
 	enemyManager_->Draw(re);
 	defenceTarget_->Draw(re);
 	crushingWall_->Draw(re);
+
+	DrawScore();
 }
 
 void InGame::CheckCollisions()
@@ -77,7 +90,6 @@ void InGame::CheckCollisions()
 	for (auto& enemy : enemyManager_->GetEnemyList())
 	{
 		enemyRect = enemy->GetRect();
-		
 
 		if (IsCollision(cameraRect, enemyRect))
 		{
@@ -99,7 +111,6 @@ void InGame::CheckCollisions()
 		{
 			enemy->OnCollision(CollisoinAttribute::Stage);
 		}
-
 	}
 
 	if (IsCollision(wallRect, targetRect))
@@ -152,5 +163,21 @@ void InGame::CheckCollisions()
 			crushingWall_->OnCollision(thwomp_->GetCharge());
 		}
 	}
-	// TODO : 護衛対象，壁都も判定を
+}
+
+void InGame::DrawScore()
+{
+	float moveDis = defenceTarget_->GetPos().x;
+	float mapchipSize = stage_->GetMapchipSize();
+
+	score_ = static_cast<uint32_t>(moveDis / mapchipSize);
+#ifdef _DEBUG
+	ImGui::Begin("Score");
+	ImGui::DragFloat2("pos", &score_pos_.x, 1.0f);
+	ImGui::DragFloat("scale", &score_Scale_, 0.01f);
+	ImGui::End();
+#endif // _DEBUG
+
+	DrawDigit(score_, score_pos_, 255, score_Scale_);
+
 }

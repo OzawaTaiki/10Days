@@ -5,13 +5,13 @@
 #include "RandomGenerator.h"
 #include "ImGuiManager.h"
 
-void Thwomp::Initialize()
+void Thwomp::Initialize(const Vector2& _pos, bool _playStaging)
 {
-	Vector2 pos = { 100,200 };
+	Vector2 pos = _pos;
 	Vector2 size = { 96,128 };
 	rect_.SetValue(pos, size);
 
-	Vector2 margin = { 64,0 };
+	Vector2 margin = { 128,0 };
 	knockbackSize_[0] = size + margin;
 	knockbackSize_[1] = size + margin * 2;
 	knockbackSize_[2] = size + margin * 3;
@@ -24,6 +24,10 @@ void Thwomp::Initialize()
 	chargeThreshold_[0] = 120;
 	chargeThreshold_[1] = 180;
 	chargeThreshold_[2] = 65535;
+
+	chargeScale_[0] = { 1.05f,1.05f };
+	chargeScale_[1] = { 1.08f,1.08f };
+	chargeScale_[2] = { 1.1f ,1.1f };
 
 	scale_ = { 1,1 };
 	rotate_ = 0;
@@ -40,11 +44,19 @@ void Thwomp::Initialize()
 	fallSpeed_ = 15.0f;
 
 	color_ = 0xffffffff;
-	textureHandle_ = 0;
+	textureHandle_ = Novice::LoadTexture("./Resources/Images/guardon.png");
 
 	input_ = Input::GetInstance();
 
-	currentState_ = std::bind(&Thwomp::ReadyState, this);
+	fromTitle_ = _playStaging;
+	if (fromTitle_)
+	{
+		StartCharging();
+		currentState_ = std::bind(&Thwomp::ChargingState, this);
+	}
+	else
+		currentState_ = std::bind(&Thwomp::ReadyState, this);
+
 }
 
 void Thwomp::Update()
@@ -63,7 +75,7 @@ void Thwomp::Update()
 void Thwomp::Draw(const sRendering& _rendring)
 {
 	Matrix3x3 wMat = MakeAffineMatrix(scale_, rotate_, rect_.pos);
-	Matrix3x3 wvpvpMat= _rendring.GetwvpVpMat(wMat);
+	Matrix3x3 wvpvpMat = _rendring.GetwvpVpMat(wMat);
 
 	for (size_t index = 0; index < 4; ++index)
 	{
@@ -78,9 +90,11 @@ void Thwomp::Draw(const sRendering& _rendring)
 					 0, 0, (int)rect_.size.x, (int)rect_.size.y,
 					 textureHandle_, color_);
 
-
+#ifdef _DEBUG
 	Novice::DrawBox((int)knockbackRect_.screenVerties[0].x, (int)knockbackRect_.screenVerties[0].y,
 					(int)knockbackSize_[charge_].x, (int)knockbackSize_[charge_].y, 0, 0xff, kFillModeWireFrame);
+#endif // _DEBUG
+
 
 }
 
@@ -96,7 +110,6 @@ void Thwomp::OnCollision(CollisoinAttribute _attribute)
 		if (isFalling_)
 			endFalling_ = true;
 		break;
-	case CollisoinAttribute::KnockbacKRect:
 	default:
 		break;
 	}
@@ -113,6 +126,16 @@ void Thwomp::PositionUpdate()
 	rect_.pos += move_;
 	move_ = { 0,0 };
 	rect_.Calculate();
+}
+
+void Thwomp::FallToTarget(const Vector2& _targetPosition)
+{
+	_targetPosition;
+}
+
+void Thwomp::ReturnToTarget(const Vector2& _targetPosition)
+{
+	_targetPosition;
 }
 
 std::optional<Rect> Thwomp::GetKnokbackRect() const
@@ -147,7 +170,7 @@ void Thwomp::StartCharging()
 {
 	isReady_ = false;
 	isCharging_ = true;
-	color_ = 0xff0000ff;
+	//color_ = 0xff0000ff;
 }
 
 void Thwomp::StartFalling()
@@ -159,15 +182,15 @@ void Thwomp::StartFalling()
 
 	frameCountForCharge_ = 0;
 
-	color_ = 0x00ff00ff;
+	//color_ = 0x00ff00ff;
 }
 
 void Thwomp::StartReturning()
 {
 	isFalling_ = false;
 	isReturning_ = true;
-
-	color_ = 0x0000ffff;
+	scale_ = { 1,1 };
+	//color_ = 0x0000ffff;
 }
 
 void Thwomp::StartReadyState()
@@ -178,7 +201,23 @@ void Thwomp::StartReadyState()
 	endFalling_ = false;
 	isReturning_ = false;
 
-	color_ = 0xffffffff;
+	rect_.pos = prePos_;
+
+	//color_ = 0xffffffff;
+}
+
+void Thwomp::StartStagingFromTitle()
+{
+	prePos_ = { 640,100 };
+	currentState_();
+
+	if (frameCountForCharge_ >= chargeThreshold_[1])
+		currentState_ = std::bind(&Thwomp::FallingState, this);
+
+	if (isReady_)
+		fromTitle_ = false;
+
+	rect_.Calculate(); 
 }
 
 void Thwomp::Move()
@@ -235,6 +274,7 @@ void Thwomp::ChargingState()
 			continue;
 
 		charge_ = i;
+		scale_= chargeScale_[charge_];
 		break;
 	}
 
@@ -244,6 +284,7 @@ void Thwomp::ChargingState()
 		StartFalling();
 		currentState_ = std::bind(&Thwomp::FallingState, this);
 	}
+
 
 }
 
@@ -271,6 +312,7 @@ void Thwomp::ReturningState()
 
 void Thwomp::ShowImgui()
 {
+#ifdef _DEBUG
 	ImGui::Begin("Thwomp");
 	ImGui::DragFloat2("position", &rect_.pos.x, 1.0f);
 	ImGui::DragFloat("moveSpeed", &moveSpeed_, 0.1f);
@@ -283,4 +325,5 @@ void Thwomp::ShowImgui()
 	ImGui::Text(" Returning : %s", isReturning_? "true" : "false");
 	ImGui::InputInt("charge", reinterpret_cast<int*>(&charge_));
 	ImGui::End();
+#endif // _DEBUG
 }

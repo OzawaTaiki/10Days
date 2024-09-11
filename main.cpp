@@ -2,7 +2,7 @@
 #define _USE_MATH_DEFINES
 #include "utils.h"
 #include <numbers>
-#include <imgui.h>
+#include "ImGuiManager.h"
 #include <random>
 #include "InGame.h"
 #include "RandomGenerator.h"
@@ -23,10 +23,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char keys[256] = {0};
 	char preKeys[256] = {0};
 
+	LoadNumSprite();
 
 	SceneManager* sceneManager = nullptr;
 	sceneManager = SceneManager::GetInstance();
 	sceneManager->Initialize(sceneName::Title);
+	//sceneManager->Initialize(sceneName::Game);
 
 	RandomGenerator* randomGenerator = nullptr;
 	randomGenerator->GetInstance();

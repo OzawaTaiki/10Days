@@ -28,6 +28,7 @@ private:
 	EnemyManager(const EnemyManager&) = delete;
 	EnemyManager& operator=(const EnemyManager&) = delete;
 
+	int textureHandle_;
 	std::list< std::unique_ptr<Enemy>> enemis_;
 	Thwomp* thwompPtr_;
 };

@@ -11,8 +11,8 @@ public:
 	void Draw(const sRendering& _rendring);
 
 	//Vector2 GetScroll(){return scroll; };
-	void SetParent(Vector2* _parent) { parent_ = _parent; }
-
+	void SetParent(Vector2* _parent);
+	void SetMovableRange(const Vector2& _min, const Vector2& _max) { minMovableRange_ = _min; maxMovableRange_ = _max; };
 
 	Vector2 GetShake() { return shake_; }
 	sRendering GetRenderringMatrix() { return rendering_; }
@@ -20,8 +20,11 @@ public:
 	sLine GetLine() const { return downLine_; };
 
 	CollisoinAttribute GetCollisoinAttribute() { return CollisoinAttribute::ScreenRect; }
+
+	void				StartStagingFromTitle(bool _endFall);
 private:
 	void Shaking();
+	void Clamp();
 
 	Vector2						pos_;
 	Vector2						size_;
@@ -45,13 +48,13 @@ private:
 	int							baseShakeCount_;
 	Vector2						shake_;
 
+	Vector2						minMovableRange_;
+	Vector2						maxMovableRange_;
 
 	float						kWindowHeight_;
 	float						kWindowWidth_;
 
-#ifdef _DEBUG
 	void ShowImgui();
-#endif // _DEBUG
 
 
 };

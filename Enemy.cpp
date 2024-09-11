@@ -1,12 +1,13 @@
 ﻿#include "Enemy.h"
 #include "ImGuiManager.h"
 #include "Thwomp.h"
+#include <string>
 
-void Enemy::Initialize(const Vector2& _position, Thwomp* _thwompPtr)
+void Enemy::Initialize(const Vector2& _position, Thwomp* _thwompPtr, int _textureHandle)
 {
 	Vector2 pos = _position;
 	Vector2 size = { 64,64 };
-	pos.y = 500 ;
+	//pos.y = 500 ;
 	pos.x -= size.x / 2.0f;
 	pos.y -= size.y / 2.0f;
 	rect_.SetValue(pos, size);
@@ -28,11 +29,11 @@ void Enemy::Initialize(const Vector2& _position, Thwomp* _thwompPtr)
 	hp_ = kMaxHp_;
 	isAlive_ = true;
 
-	damageCoolTime_ = 120;
+	damageCoolTime_ = 45;
 	currentCoolTime_ = damageCoolTime_;
 	isInvincible_ = false;
 
-	textureHandle_ = 0;
+	textureHandle_ = _textureHandle;
 	color_ = 0xffffffff;
 
 	thwompPtr_ = _thwompPtr;
@@ -42,9 +43,6 @@ void Enemy::Initialize(const Vector2& _position, Thwomp* _thwompPtr)
 
 void Enemy::Update()
 {
-#ifdef _DEBUG
-	ShowImgui();
-#endif // _DEBUG
 
 	Move();
 	UpdateInvincible();
@@ -56,6 +54,9 @@ void Enemy::Update()
 
 void Enemy::Draw(const sRendering& _rendring)
 {
+	if (!isAlive_)
+		return;
+
 	Matrix3x3 wMat = MakeAffineMatrix(scale_, rotate_, rect_.pos);
 	Matrix3x3 wvpvpMat = _rendring.GetwvpVpMat(wMat);
 
@@ -66,17 +67,17 @@ void Enemy::Draw(const sRendering& _rendring)
 
 	
 
-	Novice::DrawQuad((int)rect_.screenVerties[0].x-1, (int)rect_.screenVerties[0].y-1,
-					 (int)rect_.screenVerties[1].x+1, (int)rect_.screenVerties[1].y-1,
-					 (int)rect_.screenVerties[2].x-1, (int)rect_.screenVerties[2].y+1,
-					 (int)rect_.screenVerties[3].x+1, (int)rect_.screenVerties[3].y+1,
-					 0, 0, (int)rect_.size.x+2, (int)rect_.size.y+2,
-					 textureHandle_, 0xff);
+	/*Novice::DrawQuad((int)rect_.screenVerties[0].x - 1, (int)rect_.screenVerties[0].y - 1,
+					 (int)rect_.screenVerties[1].x + 1, (int)rect_.screenVerties[1].y - 1,
+					 (int)rect_.screenVerties[2].x - 1, (int)rect_.screenVerties[2].y + 1,
+					 (int)rect_.screenVerties[3].x + 1, (int)rect_.screenVerties[3].y + 1,
+					 0, 0, (int)rect_.size.x + 2, (int)rect_.size.y + 2,
+					 textureHandle_, 0xff);*/
 	Novice::DrawQuad((int)rect_.screenVerties[0].x, (int)rect_.screenVerties[0].y,
 					 (int)rect_.screenVerties[1].x, (int)rect_.screenVerties[1].y,
 					 (int)rect_.screenVerties[2].x, (int)rect_.screenVerties[2].y,
 					 (int)rect_.screenVerties[3].x, (int)rect_.screenVerties[3].y,
-					 0, 0, (int)rect_.size.x, (int)rect_.size.y,
+					 int(rect_.size.x * textureIndex_), int(0), (int)rect_.size.x, (int)rect_.size.y,
 					 textureHandle_, color_);
 
 }
@@ -143,6 +144,8 @@ void Enemy::Move()
 		velocity_.y = 15.0f;
 	move_.x += moveSpeed_;
 	move_.y += velocity_.y;
+
+	Animation();
 }
 
 void Enemy::Damage()
@@ -202,17 +205,38 @@ void Enemy::CalculateKnockbackVelocity(const Vector2& _targetPos, const Vector2&
 
 	velocity_.x = baseKnockbackVelocity_.x * magnification * dir.x;
 	velocity_.y = baseKnockbackVelocity_.y;
-};
-
-void Enemy::ShowImgui()
+}
+void Enemy::Animation()
 {
-	ImGui::Begin("Enemy");
-	ImGui::DragFloat2("position", &rect_.pos.x, 1.0f);
-	ImGui::DragFloat("speed", &moveSpeed_, 0.1f);
-	ImGui::DragFloat2("move", &move_.x, 0.1f);
-	ImGui::Text("Moving : %s", canMoving_ ? "true" : "false");
-	ImGui::Text("HP : %d", hp_);
-	ImGui::Text("isAlive : %s", isAlive_ ? "true" : "false");
-	ImGui::Checkbox("isMove", &Im_isMove_);
-	ImGui::End();
+	currentAnimationCount_++;
+	if (currentAnimationCount_ % animationFrame_ == 0)
+	{
+		textureIndex_++;
+		if (textureIndex_ > 2)
+			textureIndex_ = 0;
+	}
+}
+
+void Enemy::ShowImgui(int _num)
+{
+#ifdef _DEBUG
+	std::string str = "Enemy_" + std::to_string(_num);
+
+	if (ImGui::BeginTabBar("enemis"))
+	{
+		if(ImGui::BeginTabItem(str.c_str()))
+		{
+			ImGui::DragFloat2("position", &rect_.pos.x, 1.0f);
+			ImGui::DragFloat("speed", &moveSpeed_, 0.1f);
+			ImGui::DragFloat2("move", &move_.x, 0.1f);
+			ImGui::Text("Moving : %s", canMoving_ ? "true" : "false");
+			ImGui::Text("HP : %d", hp_);
+			ImGui::Text("isAlive : %s", isAlive_ ? "true" : "false");
+			ImGui::Checkbox("isMove", &Im_isMove_);
+			ImGui::InputInt("animationFrame", &animationFrame_);
+			ImGui::EndTabItem();
+		}
+		ImGui::EndTabBar();
+	}
+#endif // _DEBUG
 }

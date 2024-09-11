@@ -3,20 +3,23 @@
 
 void CrushingWall::Initialize()
 {
-	Vector2 pos = { -300,0 };
-	Vector2 size = { 100,1440 };
-	rect_.SetValue(pos, size);
+	Vector2 pos = { -1480,0 };
+	Vector2 size = { 1280,720 };
+	Vector2 center = { -840,360 };
+	rect_.SetValue(center, size);
 	
 	moveSpeed_ = 0.5f;
 
 	rotate_ = 0.0f;
 	scale_ = { 1.0f,1.0f };
 
+	spriteSize_ = { 1280 ,720 };
+
 	returnValue_[0] = 60;
 	returnValue_[1] = 90;
 	returnValue_[2] = 150;
 
-	textureHandle_ = 0;
+	textureHandle_ = Novice::LoadTexture("./Resources/Images/wall.png");
 	color_ = 0x808080f0;
 
 	im_isMove_ = true;
@@ -30,6 +33,7 @@ void CrushingWall::Update()
 
 	Move();
 
+	Animation();
 	rect_.Calculate();
 }
 
@@ -50,11 +54,11 @@ void CrushingWall::Draw(const sRendering& _rendring)
 					 0, 0, (int)rect_.size.x, (int)rect_.size.y,
 					 textureHandle_, color_);*/
 
-	Novice::DrawQuad((int)0, (int)0,
-					 (int)rect_.screenVerties[1].x, (int)rect_.screenVerties[1].y,
-					 (int)0, (int)1280,
-					 (int)rect_.screenVerties[3].x, (int)1280,
-					 0, 0, (int)rect_.size.x, (int)rect_.size.y,
+	Novice::DrawQuad((int)rect_.screenVerties[0].x, (int)0,
+					 (int)rect_.screenVerties[1].x, (int)0,
+					 (int)rect_.screenVerties[2].x, (int)720,
+					 (int)rect_.screenVerties[3].x, (int)720,
+					 int(spriteSize_.x * textureIndex_), int(0), (int)spriteSize_.x, (int)spriteSize_.y, 
 					 textureHandle_, color_);
 }
 
@@ -69,9 +73,23 @@ void CrushingWall::Move()
 		rect_.pos.x += moveSpeed_;
 }
 
+void CrushingWall::Animation()
+{
+	currentAnimationCount_++;
+	if (currentAnimationCount_ % animationFrame_ == 0)
+	{
+		textureIndex_++;
+		if (textureIndex_ > 3)
+			textureIndex_ = 0;
+	}
+}
+
 void CrushingWall::ShowImgui()
 {
+#ifdef _DEBUG
 	ImGui::Begin("CrushingWall");
 	ImGui::Checkbox("isMove", &im_isMove_);
+	ImGui::InputInt("animationframe", &animationFrame_);
 	ImGui::End();
+#endif // _DEBUG
 }

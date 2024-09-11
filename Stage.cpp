@@ -58,7 +58,7 @@ bool Stage::CollisionCheck(Rect& _rect,Vector2& _move)
 			posY[0] < 0 || posY[1] < 0 ||
 			posX[0] >= maps_[0].size() || posX[1] >= maps_[0].size() ||
 			posY[0] >= maps_.size()	   || posY[1] >= maps_.size())
-			hit = true;
+			hit = false;
 
 		else if (maps_[posY[0]][posX[0]] != 0 &&
 			maps_[posY[1]][posX[1]] != 0 &&
@@ -96,7 +96,7 @@ bool Stage::CollisionCheck(Rect& _rect,Vector2& _move)
 			posY[0] < 0 || posY[1] < 0 ||
 			posX[0] >= maps_[0].size() || posX[1] >= maps_[0].size() ||
 			posY[0] >= maps_.size() || posY[1] >= maps_.size())
-			hit = true;
+			hit = false;
 
 		else if (maps_[posY[0]][posX[0]] != 0 &&
 			maps_[posY[1]][posX[1]] != 0 &&

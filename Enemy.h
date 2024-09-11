@@ -7,7 +7,7 @@ class Thwomp;
 class Enemy
 {
 public:
-	void Initialize(const Vector2& _position, Thwomp* _thwompPtr);
+	void Initialize(const Vector2& _position, Thwomp* _thwompPtr,int _textureHandle);
 	void Update();
 	void Draw(const sRendering& _rendring);
 
@@ -19,7 +19,10 @@ public:
 	CollisoinAttribute GetCollisoinAttribute() { return CollisoinAttribute::DefenceTarget; }
 
 	void PositionUpdate();
+	void Dead() { isAlive_ = false; }
 
+
+	void ShowImgui(int _num);
 private:
 
 	void Move();
@@ -27,6 +30,9 @@ private:
 	void Knockback(const Vector2& _velocity);
 	void UpdateInvincible();
 	void CalculateKnockbackVelocity(const Vector2& _targetPos, const Vector2& _thwompPos);
+	
+	void Animation();
+
 
 	Rect				rect_;
 	Vector2				scale_;
@@ -43,7 +49,7 @@ private:
 	bool				canMoving_;
 
 	int					hp_;
-	const int			kMaxHp_ = 3;
+	const int			kMaxHp_ = 2;
 	bool				isAlive_;
 
 	Thwomp*				thwompPtr_;
@@ -53,15 +59,16 @@ private:
 	uint32_t			currentCoolTime_;			//無敵時間カウント用
 	bool				isInvincible_;
 
+	int						textureIndex_ = 0;				//何枚目を表示するか
+	int						currentAnimationCount_ = 0;		//カウント用
+	int						animationFrame_ = 10;			//何フレームで切り替えるか
+
 	int					textureHandle_;
 	unsigned int		color_;
 
 
 	bool Im_isMove_;
 
-#ifdef _DEBUG
-	void ShowImgui();
-#endif // _DEBUG
 
 
 

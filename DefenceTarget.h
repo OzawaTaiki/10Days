@@ -14,6 +14,7 @@ public:
 
 
 	Vector2& GetMove() { return move_; }
+	Vector2 GetPos() { return rect_.pos; }
 	bool Isalive() { return isAlive_; }
 	Rect GetRect() const { return rect_; };
 	CollisoinAttribute GetCollisoinAttribute() { return CollisoinAttribute::DefenceTarget; }
@@ -28,6 +29,7 @@ private:
 	void Knockback(const Vector2& _velocity);
 	void UpdateInvincible();
 	void CalculateKnockbackVelocity(const Vector2& _targetPos, const Vector2& _thwompPos);
+	void Animation();
 
 	Rect				rect_;
 	Vector2				scale_;
@@ -51,16 +53,19 @@ private:
 	uint32_t			currentCoolTime_;			//無敵時間カウント用
 	bool				isInvincible_;
 
+	int					textureIndex_ = 0;				//何枚目を表示するか
+	int					currentAnimationCount_ = 0;		//カウント用
+	int					animationFrame_ = 10;			//何フレームで切り替えるか
+
 	int					textureHandle_;
 	unsigned int		color_;
+	
 
 	Thwomp*				thwompPtr_;
 
 	bool Im_isMove_;
 
-#ifdef _DEBUG
 	void ShowImgui();
-#endif // _DEBUG
 
 
 };

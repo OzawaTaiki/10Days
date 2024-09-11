@@ -6,8 +6,13 @@
 #include "Matrix3x3.h"
 #include "Rendering.h"
 #include <cstdint>
+#include <vector>
+
 const int kColumnWidth = 64;
 const int kRowHeight = 20;
+//"C:\class\2年前期\GJ\sample1\Resources\Images\Numbers\0.png"
+static int numSprite[10];
+
 //
 //struct Vector2
 //{
@@ -174,3 +179,9 @@ bool IsCollision(const Rect& _rect, const sLine& _line);
 Vector2 GetDirectionToTarget(const Vector2& _targetPos, const Vector2& _myPos);
 
 Matrix3x3 operator*(const Matrix3x3& _mat, const Matrix3x3& _mat1);
+
+std::vector<uint32_t> SplitDigit(uint32_t _num);
+
+void DrawDigit(uint32_t _num, const Vector2& _pos, uint32_t _color, float _scale = 1.0f);
+
+void LoadNumSprite();

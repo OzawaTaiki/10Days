@@ -95,15 +95,18 @@ void Camera::Update(bool _isFalling, bool _isReturning,bool _endFall)
 		}
 	}
 
+	pos_ = screenRect_.pos;
+
 	if (_endFall)
 		isShake_ = true;
 
 	Shaking();
+	Clamp();
 
 	if (isShake_)
-		rendering_.worldMatrix = MakeAffineMatrix(scale_, rotate_, screenRect_.pos + shake_);
+		rendering_.worldMatrix = MakeAffineMatrix(scale_, rotate_, pos_ + shake_);
 	else
-		rendering_.worldMatrix = MakeAffineMatrix(scale_, rotate_, screenRect_.pos);
+		rendering_.worldMatrix = MakeAffineMatrix(scale_, rotate_, pos_);
 	rendering_.viewMatrix = Inverse(rendering_.worldMatrix);
 	rendering_.orthoMatrix = MakeOrthographicMatrix(-kWindowWidth_ / 2, -kWindowHeight_ / 2, kWindowWidth_ / 2, kWindowHeight_ / 2);
 	rendering_.viewportMatrix = MakeViewportMatrix(0, 0, size_.x, size_.y);
@@ -114,14 +117,49 @@ void Camera::Update(bool _isFalling, bool _isReturning,bool _endFall)
 
 void Camera::Draw(const sRendering& _rendring)
 {
-	_rendring;
-	Vector2 drawpos = pos_ - screenRect_.size / 2.0f;
-	Matrix3x3 wMat = MakeAffineMatrix(scale_, rotate_, drawpos);
-	Matrix3x3 wvpvpMat = _rendring.GetwvpVpMat(wMat);
+	Vector2 drawpos = screenRect_.pos - screenRect_.size / 2.0f;
+	//Matrix3x3 wMat = MakeAffineMatrix(scale_, rotate_, drawpos);
+	Matrix3x3 vpvpMat = _rendring.GetvpVpMat();
 
-	drawpos = Transform(screenRect_.pos, wvpvpMat);
+	drawpos = Transform(drawpos, vpvpMat);
 
 	Novice::DrawBox((int)drawpos.x, (int)drawpos.y, (int)screenRect_.size.x, (int)screenRect_.size.y, 0, 0x000000ff, kFillModeWireFrame);
+}
+
+void Camera::SetParent(Vector2* _parent)
+{ 
+	parent_ = _parent;
+	screenRect_.pos = pos_ + *parent_;
+	pos_ = screenRect_.pos;
+	Clamp();
+	screenRect_.Calculate();
+
+	rendering_.worldMatrix = MakeAffineMatrix(scale_, rotate_, pos_);
+	rendering_.viewMatrix = Inverse(rendering_.worldMatrix);
+	rendering_.orthoMatrix = MakeOrthographicMatrix(-kWindowWidth_ / 2, -kWindowHeight_ / 2, kWindowWidth_ / 2, kWindowHeight_ / 2);
+	rendering_.viewportMatrix = MakeViewportMatrix(0, 0, size_.x, size_.y);
+
+}
+
+void Camera::StartStagingFromTitle(bool _endFall)
+{
+	screenRect_.pos = lerp(screenRect_.pos, *parent_, 0.1f);
+
+	if (_endFall)
+		isShake_ = true;
+	pos_ = screenRect_.pos;
+	Shaking();
+	Clamp();
+
+	if (isShake_)
+		rendering_.worldMatrix = MakeAffineMatrix(scale_, rotate_, pos_ + shake_);
+	else
+		rendering_.worldMatrix = MakeAffineMatrix(scale_, rotate_, pos_);
+	rendering_.viewMatrix = Inverse(rendering_.worldMatrix);
+	rendering_.orthoMatrix = MakeOrthographicMatrix(-kWindowWidth_ / 2, -kWindowHeight_ / 2, kWindowWidth_ / 2, kWindowHeight_ / 2);
+	rendering_.viewportMatrix = MakeViewportMatrix(0, 0, size_.x, size_.y);
+
+	screenRect_.Calculate();
 }
 
 void Camera::Shaking()
@@ -139,8 +177,24 @@ void Camera::Shaking()
 	shake_ = RandomGenerator::GetInstance()->GetUniformVec2(-5.0f, 5.0f);
 }
 
+void Camera::Clamp()
+{
+	if (pos_.x - size_.x / 2.0f < minMovableRange_.x)
+		pos_.x = minMovableRange_.x + size_.x / 2.0f;
+	if (pos_.x + size_.x / 2.0f > maxMovableRange_.x)
+		pos_.x = maxMovableRange_.x - size_.x / 2.0f;
+
+	if (pos_.y - size_.y / 2.0f < minMovableRange_.y)
+		pos_.y = minMovableRange_.y + size_.y / 2.0f;
+	if (pos_.y + size_.y / 2.0f > maxMovableRange_.y)
+		pos_.y = maxMovableRange_.y - size_.y / 2.0f;
+
+
+}
+
 void Camera::ShowImgui()
 {
+#ifdef _DEBUG
 	ImGui::Begin("Camera");
 	ImGui::DragFloat2("position", &pos_.x, 1.0f);
 	ImGui::BeginDisabled(true);
@@ -151,6 +205,7 @@ void Camera::ShowImgui()
 	ImGui::DragFloat("MoveSpeed", &moveSpeed_, 1.0f);
 	ImGui::InputInt("shakeTime", &baseShakeCount_);
 	ImGui::End();
+#endif // _DEBUG
 }
 
 

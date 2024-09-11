@@ -494,6 +494,63 @@ Matrix3x3 operator*(const Matrix3x3& _mat, const Matrix3x3& _mat1)
 	return Multiply(_mat,_mat1);
 }
 
+std::vector<uint32_t> SplitDigit(uint32_t _num)
+{
+	std::vector<uint32_t> digits;
+
+	// 各桁を分解してベクトルに追加
+	do {
+		digits.push_back(_num % 10);
+		_num /= 10;
+	} while (_num > 0);
+
+	// 桁が逆順になっているため、正順にする
+	std::reverse(digits.begin(), digits.end());
+
+	return digits;
+
+}
+
+void DrawDigit(uint32_t _num, const Vector2& _pos, uint32_t _color, float _scale )
+{
+	Vector2 defaultSize = { 112,72 };
+
+	Vector2 offset = defaultSize * _scale;
+
+	std::vector<uint32_t> numbers = SplitDigit(_num);
+
+	int count = 0;
+	for (uint32_t num : numbers)
+	{
+		Novice::DrawSprite(int(_pos.x + offset.x * count), int(_pos.y), numSprite[num], _scale, _scale, 0, _color);
+		count++;
+	}
+}
+
+void LoadNumSprite()
+{
+	numSprite[0] =
+		Novice::LoadTexture("./Resources/Images/Numbers/0.png");
+	numSprite[1] =
+		Novice::LoadTexture("./Resources/Images/Numbers/1.png");
+	numSprite[2] =
+		Novice::LoadTexture("./Resources/Images/Numbers/2.png");
+	numSprite[3] =
+		Novice::LoadTexture("./Resources/Images/Numbers/3.png");
+	numSprite[4] =
+		Novice::LoadTexture("./Resources/Images/Numbers/4.png");
+	numSprite[5] =
+		Novice::LoadTexture("./Resources/Images/Numbers/5.png");
+	numSprite[6] =
+		Novice::LoadTexture("./Resources/Images/Numbers/6.png");
+	numSprite[7] =
+		Novice::LoadTexture("./Resources/Images/Numbers/7.png");
+	numSprite[8] =
+		Novice::LoadTexture("./Resources/Images/Numbers/8.png");
+	numSprite[9] =
+		Novice::LoadTexture("./Resources/Images/Numbers/9.png");
+}
+
 Matrix3x3 sRendering::GetwvpVpMat(const Matrix3x3& _worldMat) const
 {
 	Matrix3x3 result;
@@ -515,6 +572,22 @@ Matrix3x3 sRendering::GetvpVpMat() const
 	return result;
 }
 
+Matrix3x3 sRendering::GetvpVpMat(float _scale) const
+{
+	Matrix3x3 result;
+
+	Vector2 pos = { worldMatrix.m[2][0],worldMatrix.m[2][1] };
+	pos.x *= _scale;
+
+	Matrix3x3 matW = MakeAffineMatrix({ 1.0f,1.0f }, 0, pos);
+	Matrix3x3 matView = Inverse(matW);
+
+	result = Multiply(matView, this->orthoMatrix);
+	result = Multiply(result, this->viewportMatrix);
+
+	return result;
+};
+
 Vector2 Vector2::operator-()const
 {
 	return { -this->x,-this->y };
@@ -528,6 +601,11 @@ Vector2 Vector2::operator+(const Vector2& _vec)const
 Vector2 Vector2::operator-(const Vector2& _vec)const
 {
 	return Subtract(*this, _vec);
+}
+
+Vector2 Vector2::operator/(const Vector2& _vec) const
+{
+	return { (*this).x / _vec.x ,(*this).y / _vec.y };
 }
 
 Vector2 Vector2::operator*(float _scalar)const

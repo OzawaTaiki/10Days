@@ -9,7 +9,7 @@ class Input;
 class Thwomp
 {
 public:
-	void				Initialize();
+	void				Initialize(const Vector2& _pos = { 100,200 }, bool _playStaging = false);
 	void				Update();
 	void				Draw(const sRendering& _rendring);
 
@@ -17,15 +17,20 @@ public:
 	void				OnCollisionToLine(const sLine& _line);
 
 	void				PositionUpdate();
+	void				FallToTarget(const Vector2& _targetPosition);
+	void				ReturnToTarget(const Vector2& _targetPosition);
 
+	int					GetTextureHandle() { return textureHandle_; }
 	size_t				GetCharge()				{ return charge_; }
 
+	bool				isReady()			{ return isReady_; }
 	bool				isReturning()			{ return isReturning_; }
 	bool				IsFalling()				{ return isFalling_; }
 	bool				EndFalling()			{ return endFalling_; }
 	bool				CanKnockback()			{ return canKnockBack_; }
 
 	Vector2				GetPos()				{ return rect_.pos; }
+	Vector2				GetSize()				{ return rect_.size; }
 	Vector2&			GetMove()				{ return move_; }
 	Vector2*			GetPositoinPtr()		{ return &rect_.pos; }
 
@@ -34,7 +39,9 @@ public:
 	Vector2				GetKnockbackPositoin(const Vector2& _posision);
 	std::optional<Rect> GetKnokbackRect() const;
 
+	void				StartStagingFromTitle();
 private:
+
 
 	void				Move();
 	void				StartCharging();
@@ -64,6 +71,7 @@ private:
 
 	int						frameCountForCharge_;
 	int						chargeThreshold_[3];
+	Vector2					chargeScale_[3];
 
 	float					moveSpeed_;
 
@@ -79,13 +87,13 @@ private:
 	float					fallSpeed_;
 	Vector2					prePos_;
 
+	bool					fromTitle_;
+
 	int						textureHandle_;
 	unsigned int			color_;
 
 
 	Input*					input_					= nullptr;
 
-#ifdef _DEBUG
 	void ShowImgui();
-#endif // _DEBUG
 };

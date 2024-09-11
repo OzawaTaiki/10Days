@@ -13,6 +13,9 @@ public:
 	
 	bool CollisionCheck(Rect& _rect, Vector2& _moveDir);
 
+	float GetMapchipSize() { return kMapchipSize_; }
+	Vector2 GetMapSize() { return {(float) maps_[0].size(),(float)maps_.size()}; }
+
 private:
 	void LoadFile();
 

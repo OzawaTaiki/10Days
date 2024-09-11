@@ -16,4 +16,5 @@ struct sRendering
 
 	Matrix3x3 GetwvpVpMat(const Matrix3x3& _worldMat)const;
 	Matrix3x3 GetvpVpMat()const;
+	Matrix3x3 GetvpVpMat(float _scale)const;
 };
