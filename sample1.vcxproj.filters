@@ -1,6 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Defines">
+      <UniqueIdentifier>{df9f91ec-f65a-4dc1-b78a-44be7dce7e0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{08e1e054-6553-4c4e-b7d9-7c54c97de541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DefenceTarget">
+      <UniqueIdentifier>{9455181b-6d99-44f9-b628-fb5a8be872be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{00f8997b-ef37-4150-ac21-1e37e23bc832}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Thwonp">
+      <UniqueIdentifier>{b1d9c93e-1c3a-4ecc-9896-dc890adbe46a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{22a59af8-cebc-48b9-8199-a5a17328e8a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Manager">
+      <UniqueIdentifier>{359a6238-1276-4568-a72b-8a55db344189}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Title">
+      <UniqueIdentifier>{e56f2308-4773-477b-85f5-c395e6bb39f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Ingame">
+      <UniqueIdentifier>{67914223-06c0-4c25-bc7e-ba4d202e540b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Result">
+      <UniqueIdentifier>{1b62dbfb-eb62-48d8-b85d-d639581aee0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemy">
+      <UniqueIdentifier>{ce0ece88-229b-4257-b00b-e668d0a60b3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CrushingWall">
+      <UniqueIdentifier>{f2de4f4b-a7df-47b8-b490-179e67e6b171}</UniqueIdentifier>
+    </Filter>
     <Filter Include="KamataEngine">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
@@ -14,20 +50,8 @@
     <Filter Include="KamataEngine\Adapter">
       <UniqueIdentifier>{c6468eb4-788b-4a83-b207-a5f4804e56c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Defines">
-      <UniqueIdentifier>{df9f91ec-f65a-4dc1-b78a-44be7dce7e0d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Camera">
-      <UniqueIdentifier>{08e1e054-6553-4c4e-b7d9-7c54c97de541}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene">
-      <UniqueIdentifier>{22a59af8-cebc-48b9-8199-a5a17328e8a9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Thwonp">
-      <UniqueIdentifier>{b1d9c93e-1c3a-4ecc-9896-dc890adbe46a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DefenceTarget">
-      <UniqueIdentifier>{9455181b-6d99-44f9-b628-fb5a8be872be}</UniqueIdentifier>
+    <Filter Include="BackGround">
+      <UniqueIdentifier>{994c264b-aaa2-427f-9d20-5385a29004cf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -43,7 +67,6 @@
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\WinApp.cpp">
       <Filter>KamataEngine\Source</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp">
       <Filter>KamataEngine\Adapter</Filter>
     </ClCompile>
@@ -56,9 +79,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="InGame.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Thwomp.cpp">
       <Filter>Thwonp</Filter>
     </ClCompile>
@@ -68,35 +88,39 @@
     <ClCompile Include="DefenceTarget.cpp">
       <Filter>DefenceTarget</Filter>
     </ClCompile>
-    <ClCompile Include="CrushingWall.cpp">
-      <Filter>KamataEngine</Filter>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Scene\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>KamataEngine</Filter>
+    <ClCompile Include="InGame.cpp">
+      <Filter>Scene\Ingame</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyManager.cpp">
-      <Filter>KamataEngine</Filter>
+    <ClCompile Include="Result.cpp">
+      <Filter>Scene\Result</Filter>
     </ClCompile>
-    <ClCompile Include="Stage.cpp">
-      <Filter>KamataEngine</Filter>
+    <ClCompile Include="Title.cpp">
+      <Filter>Scene\Title</Filter>
     </ClCompile>
     <ClCompile Include="RandomGenerator.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>KamataEngine</Filter>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>KamataEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="Result.cpp">
-      <Filter>KamataEngine</Filter>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Enemy</Filter>
     </ClCompile>
     <ClCompile Include="ChangeSceneFromTitle.cpp">
-      <Filter>KamataEngine</Filter>
+      <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="CrushingWall.cpp">
+      <Filter>CrushingWall</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="BackGround.cpp">
-      <Filter>KamataEngine</Filter>
+      <Filter>BackGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -169,9 +193,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Camera</Filter>
     </ClInclude>
-    <ClInclude Include="InGame.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Thwomp.h">
       <Filter>Thwonp</Filter>
     </ClInclude>
@@ -205,16 +226,41 @@
     <ClInclude Include="CollisionAtrribute.h">
       <Filter>Defines</Filter>
     </ClInclude>
-    <ClInclude Include="CrushingWall.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemyManager.h" />
-    <ClInclude Include="Stage.h" />
-    <ClInclude Include="RandomGenerator.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="Title.h" />
-    <ClInclude Include="Result.h" />
-    <ClInclude Include="ChangeSceneFromTitle.h" />
-    <ClInclude Include="BackGround.h" />
+    <ClInclude Include="SceneManager.h">
+      <Filter>Scene\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="InGame.h">
+      <Filter>Scene\Ingame</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>Scene\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomGenerator.h">
+      <Filter>KamataEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeSceneFromTitle.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CrushingWall.h">
+      <Filter>CrushingWall</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>BackGround</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

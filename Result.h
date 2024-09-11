@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Scene.h"
+#include "utils.h"
 
 #include <cstdint>
 
@@ -14,8 +15,27 @@ public:
 	void Draw() override;
 
 
-
 private:
+
+	float sinValue_[2];
+	float count_[2];
+
 	uint32_t score_;
+
+	int hitValue_;
+
+	int Button_toTitle_;
+	int Button_continue_;
+
+	float defaultScale_;
+	float scale_[2];
+	
+	Vector2 defaultSize_;
+	Vector2 pos_[2];
+
+
+	int back_;
+
+
 
 };

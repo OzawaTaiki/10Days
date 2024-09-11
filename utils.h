@@ -92,9 +92,9 @@ struct sCamera
 };
 
 
-float lerp(float& t, float max, float min);
+float Lerp(float t, float max, float min);
 
-Vector2 lerp(Vector2 min, Vector2 max, float t);
+Vector2 Lerp(Vector2 min, Vector2 max, float t);
 
 Vector2 Bezier(const Vector2& p0, const Vector2& p1, const Vector2& p2, float t);
 
@@ -124,7 +124,7 @@ Vector2 getCrossPos(const Vector2& a, const Vector2& b, const Vector2& c, const 
 
 Vector2 Bezier(const Vector2& p0, const Vector2& p1, const Vector2& p2, float t);
 
-Vector2 lerp(Vector2 min, Vector2 max, float t);
+Vector2 Lerp(Vector2 min, Vector2 max, float t);
 
 void getVertex4(Vector2 vertex[], const Vector2& size);
 
@@ -175,6 +175,10 @@ void DrawHorizontalLineAtY(float _y, const sRendering& _rendering);
 bool IsCollision(const Rect& _rect1, const Rect& _rect2);
 
 bool IsCollision(const Rect& _rect, const sLine& _line);
+
+bool IsCollision(const Rect& _rect, const Vector2& _point);
+
+bool IsCollisionWithMouse(const Vector2& _pos, const Vector2& _size);
 
 Vector2 GetDirectionToTarget(const Vector2& _targetPos, const Vector2& _myPos);
 
