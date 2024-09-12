@@ -93,7 +93,7 @@ void DefenceTarget::OnCollision(CollisoinAttribute _attribute)
 			velocity_.y = 0;
 			isKnockback_ = false;
 		}
-		break; 
+		break;
 	case CollisoinAttribute::KnockbacKRect:
 		CalculateKnockbackVelocity(thwompPtr_->GetKnockbackPositoin(rect_.pos), thwompPtr_->GetPos());
 		break;

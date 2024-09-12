@@ -593,7 +593,6 @@ Matrix3x3 sRendering::GetwvpVpMat(const Matrix3x3& _worldMat) const
 	result = Multiply(result, this->orthoMatrix);
 	result = Multiply(result, this->viewportMatrix);
 
-
 	return result;
 }
 Matrix3x3 sRendering::GetvpVpMat() const

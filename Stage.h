@@ -11,15 +11,17 @@ public:
 	void Update();
 	void Draw(const sRendering& _rendring);
 	
-	bool CollisionCheck(Rect& _rect, Vector2& _moveDir);
+	bool CollisionCheck(Rect& _rect, Vector2& _move);
 
 	float GetMapchipSize() { return kMapchipSize_; }
 	Vector2 GetMapSize() { return {(float) maps_[0].size(),(float)maps_.size()}; }
+	bool CollisionWithPrincess(Rect& _rect, Vector2& _move, Vector2& _velo);
 
 private:
 	void LoadFile();
 
 	void Clamp(Rect& _rect, Vector2& _move);
+
 
 	std::vector<std::vector<uint32_t>>	maps_;
 
