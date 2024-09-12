@@ -493,6 +493,29 @@ bool IsCollisionWithMouse(const Vector2& _pos, const Vector2& _size)
 	return IsCollision(rect, mousePos);
 }
 
+bool CheckTopDownCollision(const Rect& _rect1, const Vector2& _move1, const Rect& _rect2, const Vector2& _move2)
+{
+	// 移動前に１の下辺が２の上辺より上にあるか
+	// 移動前の座標でxの重なり確認
+	if (_rect1.worldVerties[3].y >= _rect2.worldVerties[0].y &&
+		_rect1.worldVerties[0].x <= _rect2.worldVerties[1].x &&
+		_rect1.worldVerties[1].x >= _rect2.worldVerties[0].x)
+	{
+		Rect rect1 = _rect1;
+		Rect rect2 = _rect2;
+		rect1.pos += _move1;
+		rect2.pos += _move2;
+		rect1.Calculate();
+		rect2.Calculate();
+
+		// 移動後の衝突判定をとる
+		if (IsCollision(rect1, rect2))
+			return true;
+	}
+
+	return false;
+}
+
 Vector2 GetDirectionToTarget(const Vector2& _targetPos, const Vector2& _myPos)
 {
 	Vector2 result = { 0,0 };

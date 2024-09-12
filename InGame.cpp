@@ -111,7 +111,7 @@ void InGame::CheckCollisions()
 			defenceTarget_->OnCollision(CollisoinAttribute::Enemy);
 			enemy->OnCollision(CollisoinAttribute::DefenceTarget);
 		}
-		if (IsCollision(thwompRect, enemyRect))
+		if (thwomp_->IsInFallState() && CheckTopDownCollision(thwompRect,thwomp_->GetMove(), enemyRect,enemy->GetMove()))
 		{
 			thwomp_->OnCollision(CollisoinAttribute::Enemy);
 			enemy->OnCollision(CollisoinAttribute::Thwomp);
@@ -128,11 +128,19 @@ void InGame::CheckCollisions()
 		defenceTarget_->OnCollision(CollisoinAttribute::CrushingWall);
 	}
 
-	if (IsCollision(thwompRect, targetRect))
+	if (thwomp_->IsInFallState() && CheckTopDownCollision(thwompRect,thwomp_->GetMove(), targetRect,defenceTarget_->GetMove()))
 	{
 		thwomp_->OnCollision(CollisoinAttribute::DefenceTarget);
 		defenceTarget_->OnCollision(CollisoinAttribute::Thwomp);
 	}
+	// ガードンが落下中じゃないとき
+	// ガードンが姫より下にいて，一定範囲内にいるとき
+	// 姫，ガードンの上を歩く
+	else if ()
+	{
+
+	}
+
 	sLine cRectDownEdge = camera_->GetLine();
 	if (IsCollision(thwompRect, cRectDownEdge))
 	{

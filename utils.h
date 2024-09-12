@@ -180,6 +180,8 @@ bool IsCollision(const Rect& _rect, const Vector2& _point);
 
 bool IsCollisionWithMouse(const Vector2& _pos, const Vector2& _size);
 
+bool CheckTopDownCollision(const Rect& _rect1, const Vector2& _move1, const Rect& _rect2, const Vector2& _move2);
+
 Vector2 GetDirectionToTarget(const Vector2& _targetPos, const Vector2& _myPos);
 
 Matrix3x3 operator*(const Matrix3x3& _mat, const Matrix3x3& _mat1);
