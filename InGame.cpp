@@ -144,7 +144,7 @@ void InGame::CheckCollisions()
 	{
 		thwomp_->OnCollision(CollisoinAttribute::Stage);
 	}
-	if (stage_->CollisionCheck(targetRect, defenceTarget_->GetMove()))
+	if (stage_->CollisionWithPrincess(targetRect, defenceTarget_->GetMove(), defenceTarget_->GetVelo()))
 	{
 		defenceTarget_->OnCollision(CollisoinAttribute::Stage);
 	}

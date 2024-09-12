@@ -1,4 +1,4 @@
-#include "Stage.h"
+﻿#include "Stage.h"
 #include "EnemyManager.h"
 #include <fstream>
 #include "Input.h"
@@ -30,13 +30,13 @@ void Stage::Draw(const sRendering& _rendring)
 				Matrix3x3 wvpvpMat = _rendring.GetwvpVpMat(wMat);
 
 				Vector2 drawpos = Transform({ 0,0 }, wvpvpMat);
-				Novice::DrawBox((int)drawpos.x, (int)drawpos.y, (int)kMapchipSize_ - 1, (int)kMapchipSize_ - 1, 0, WHITE, kFillModeSolid);
+				Novice::DrawBox((int)drawpos.x, (int)drawpos.y, (int)kMapchipSize_ - 1, (int)kMapchipSize_ - 1, 0, 0xffffff80, kFillModeSolid);
 			}
 		}
 	}
 }
 
-bool Stage::CollisionCheck(Rect& _rect,Vector2& _move)
+bool Stage::CollisionCheck(Rect& _rect, Vector2& _move)
 {
 	int posX[2];
 	int posY[2];
@@ -117,6 +117,46 @@ bool Stage::CollisionCheck(Rect& _rect,Vector2& _move)
 		}
 	}
 	Clamp(_rect, _move);
+
+	return hit;
+}
+
+bool Stage::CollisionWithPrincess(Rect& _rect, Vector2& _move, Vector2& _velo)
+{
+	bool hit = CollisionCheck(_rect, _move);
+
+	int posX[2];
+	int posY[2];
+
+	Vector2 ppos = { _rect.worldVerties[1].x + kMapchipSize_ / 5.0f,_rect.pos.y + kMapchipSize_ / 2.0f };
+
+	posX[0] = static_cast<int>(ppos.x / kMapchipSize_);
+	posY[0] = static_cast<int>(ppos.y / kMapchipSize_);
+
+	ppos = { _rect.worldVerties[1].x + 1,_rect.worldVerties[2].y - 1 };
+	posX[1] = static_cast<int>(ppos.x / kMapchipSize_);
+	posY[1] = static_cast<int>(ppos.y / kMapchipSize_);
+
+	if (posX[0] >= maps_[0].size())
+		posX[0] = static_cast<int>(maps_[0].size() - 1);
+
+	// 先にブロックがある
+	if (maps_[posY[0]][posX[0]] != 0 &&
+		maps_[posY[0]][posX[0]] <= 9 )
+	{
+		// その上にブロックがない
+		if (maps_[posY[0] - 1][posX[0]] == 0)
+		{
+			_velo = { 1,-7 };
+			_move = _velo;
+			hit = true;
+		}		
+	}
+	// その下にブロックがない
+	else if (maps_[posY[1] + 1][posX[1]] == 0)
+	{
+		_move = { 0,0 };
+	}
 
 	return hit;
 }

@@ -14,6 +14,7 @@ public:
 
 
 	Vector2& GetMove() { return move_; }
+	Vector2& GetVelo() { return velocity_; }
 	Vector2 GetPos() { return rect_.pos; }
 	bool Isalive() { return isAlive_; }
 	Rect GetRect() const { return rect_; };
