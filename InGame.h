@@ -26,6 +26,7 @@ private:
 	void CheckCollisions();
 
 	void DrawScore();
+
 	float score_Scale_ = 0.6f;
 	Vector2 score_pos_ = { 20,20 };
 

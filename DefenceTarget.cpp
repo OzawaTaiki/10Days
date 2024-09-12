@@ -21,6 +21,8 @@ void DefenceTarget::Initialize()
 	move_ = { 0,0 };
 		
 	canMoving_ = false;
+	stopInCliff_ = false;
+	walkOnThwomp_ = false;
 
 	hp_ = kMaxHp_;
 	isAlive_ = true;
@@ -86,6 +88,9 @@ void DefenceTarget::OnCollision(CollisoinAttribute _attribute)
 		Damage();
 		break;
 	case CollisoinAttribute::Stage:
+		if (stopInCliff_)
+			move_ = { 0,0 };
+
 		if (move_.x == 0)
 			velocity_.x = 0;
 		if (move_.y == 0)
@@ -123,7 +128,12 @@ void DefenceTarget::Move()
 		scale_ = { 0.8f,1.1f };
 		return;
 	}
-
+	else if (stopInCliff_ && walkOnThwomp_)
+	{
+		Vector2 thwompPos = thwompPtr_->GetPos();
+		Vector2 thwompSize = thwompPtr_->GetSize();
+		rect_.pos.y = thwompPos.y - thwompSize.y / 2.0f - rect_.size.y / 2.0f;
+	}
 
 	scale_ = { 1.0f,1.0f };
 	if (!canMoving_ || !Im_isMove_ )
