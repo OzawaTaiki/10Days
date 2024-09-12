@@ -7,14 +7,16 @@ class Thwomp;
 class Enemy
 {
 public:
-	void Initialize(const Vector2& _position, Thwomp* _thwompPtr,int _textureHandle);
-	void Update();
-	void Draw(const sRendering& _rendring);
+	virtual void Initialize(const Vector2& _position, Thwomp* _thwompPtr,int _textureHandle);
+	virtual	void Update();
+	virtual void Draw(const sRendering& _rendring);
 
-	void OnCollision(CollisoinAttribute _attribute);
+	virtual void OnCollision(CollisoinAttribute _attribute);
 
 	bool IsAlive() { return isAlive_; }
+	bool CanMove() { return canMoving_; }
 	Vector2& GetMove() { return move_; }
+	Vector2 GetPos() { return rect_.pos; }
 	Rect GetRect() const { return rect_; };
 	CollisoinAttribute GetCollisoinAttribute() { return CollisoinAttribute::DefenceTarget; }
 
@@ -23,7 +25,7 @@ public:
 
 
 	void ShowImgui(int _num);
-private:
+protected:
 
 	void Move();
 	void Damage();

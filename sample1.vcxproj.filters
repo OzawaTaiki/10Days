@@ -122,6 +122,15 @@
     <ClCompile Include="BackGround.cpp">
       <Filter>BackGround</Filter>
     </ClCompile>
+    <ClCompile Include="FragileEnemy.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="StacksEnemy.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="TankEnemy.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -262,5 +271,12 @@
     <ClInclude Include="BackGround.h">
       <Filter>BackGround</Filter>
     </ClInclude>
+    <ClInclude Include="FragileEnemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="StacksEnemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="TankEnemy.h" />
   </ItemGroup>
 </Project>

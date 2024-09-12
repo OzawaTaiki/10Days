@@ -104,12 +104,12 @@ void Thwomp::OnCollision(CollisoinAttribute _attribute)
 	{
 	case CollisoinAttribute::Stage:
 		canKnockBack_ = true;
-	case CollisoinAttribute::DefenceTarget:
 	case CollisoinAttribute::ScreenRect:
-	case CollisoinAttribute::Enemy:
 		if (isFalling_)
 			endFalling_ = true;
 		break;
+	case CollisoinAttribute::DefenceTarget:
+	case CollisoinAttribute::Enemy:
 	default:
 		break;
 	}

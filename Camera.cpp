@@ -134,7 +134,7 @@ void Camera::Draw(const sRendering& _rendring)
 	DrawAABB({ 1280,720 }, vertex[1],0xa0);
 
 #ifdef _DEBUG
-	Novice::DrawBox((int)drawpos.x, (int)drawpos.y, (int)screenRect_.size.x, (int)screenRect_.size.y, 0, 0x000000ff, kFillModeWireFrame);
+	//Novice::DrawBox((int)drawpos.x, (int)drawpos.y, (int)screenRect_.size.x, (int)screenRect_.size.y, 0, 0x000000ff, kFillModeWireFrame);
 #endif // _DEBUG
 
 }

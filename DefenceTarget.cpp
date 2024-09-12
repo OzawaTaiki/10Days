@@ -37,14 +37,14 @@ void DefenceTarget::Initialize()
 
 void DefenceTarget::Update()
 {
-#ifdef _DEBUG
-	ShowImgui();
-#endif // _DEBUG
 
 	Move();
 	UpdateInvincible();
 
 	canMoving_ = false;
+#ifdef _DEBUG
+	ShowImgui();
+#endif // _DEBUG
 }
 
 void DefenceTarget::Draw(const sRendering& _rendring)

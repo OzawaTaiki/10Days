@@ -20,7 +20,7 @@ void FromTitle::Initialize()
 
 	enemyManager_ = EnemyManager::GetInstance();
 	enemyManager_->Initialize(thwomp_.get());
-	enemyManager_->AddEnemy(enemyPopPos);
+	enemyManager_->AddEnemy(enemyPopPos, static_cast<uint32_t>(EnemyType::Fraglie));
 
 	camera_->SetParent(thwomp_->GetPositoinPtr());
 }

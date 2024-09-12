@@ -122,12 +122,15 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="DefenceTarget.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="FragileEnemy.cpp" />
     <ClCompile Include="InGame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RandomGenerator.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="StacksEnemy.cpp" />
     <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="TankEnemy.cpp" />
     <ClCompile Include="Thwomp.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="utils.cpp" />
@@ -168,6 +171,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="DefenceTarget.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="FragileEnemy.h" />
     <ClInclude Include="InGame.h" />
     <ClInclude Include="Matrix3x3.h" />
     <ClInclude Include="RandomGenerator.h" />
@@ -175,7 +179,9 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="Result.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="StacksEnemy.h" />
     <ClInclude Include="Stage.h" />
+    <ClInclude Include="TankEnemy.h" />
     <ClInclude Include="Thwomp.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="utils.h" />
