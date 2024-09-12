@@ -63,9 +63,6 @@ void DefenceTarget::Draw(const sRendering& _rendring)
 					 (int)rect_.screenVerties[3].x, (int)rect_.screenVerties[3].y,
 					 int(rect_.size.x * textureIndex_), int(0), (int)rect_.size.x, (int)rect_.size.y, 
 					 textureHandle_, color_);
-
-	Vector2	p = Transform({ 64,0 }, wvpvpMat);
-	Novice::DrawEllipse((int)p.x,(int)p.y,5,5,0,255,kFillModeSolid);
 }
 
 void DefenceTarget::OnCollision(CollisoinAttribute _attribute)

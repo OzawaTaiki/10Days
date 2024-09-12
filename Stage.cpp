@@ -147,7 +147,7 @@ bool Stage::CollisionWithPrincess(Rect& _rect, Vector2& _move, Vector2& _velo)
 			_velo = { 1,-7 };
 			_move = _velo;
 			hit = true;
-		}		
+		}
 	}
 
 	ppos = { _rect.worldVerties[2].x,_rect.worldVerties[2].y };
@@ -211,7 +211,6 @@ void Stage::LoadFile()
 				EnemyManager::GetInstance()->AddEnemy(pos, num);
 			}
 			++col;
-				
 		}
 		++row;
 	}
