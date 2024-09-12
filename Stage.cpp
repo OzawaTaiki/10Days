@@ -1,6 +1,7 @@
 #include "Stage.h"
 #include "EnemyManager.h"
 #include <fstream>
+#include "Input.h"
 
 void Stage::Initialize()
 {
@@ -9,6 +10,10 @@ void Stage::Initialize()
 
 void Stage::Update()
 {
+#ifdef _DEBUG
+	if (Input::GetInstance()->TriggerKey(DIK_R))
+		LoadFile();
+#endif // _DEBUG
 
 }
 
@@ -98,10 +103,10 @@ bool Stage::CollisionCheck(Rect& _rect,Vector2& _move)
 			posY[0] >= maps_.size() || posY[1] >= maps_.size())
 			hit = false;
 
-		else if (maps_[posY[0]][posX[0]] != 0 &&
-			maps_[posY[1]][posX[1]] != 0 &&
-			(maps_[posY[0]][posX[0]] <= 9 ||
-			maps_[posY[1]][posX[1]] <= 9))
+		else if ((maps_[posY[0]][posX[0]] != 0 ||
+				 maps_[posY[1]][posX[1]] != 0) &&
+				 (maps_[posY[0]][posX[0]] <= 9 ||
+				 maps_[posY[1]][posX[1]] <= 9))
 		{
 			if (_move.y < 0)
 				_rect.pos.y = posY[0] * kMapchipSize_ + _rect.size.y / 2.0f;
@@ -118,6 +123,8 @@ bool Stage::CollisionCheck(Rect& _rect,Vector2& _move)
 
 void Stage::LoadFile()
 {
+	maps_.clear();
+
 	std::string path = "Resources/Data/mapData.csv";
 	std::ifstream file;
 	file.open(path);
@@ -148,12 +155,12 @@ void Stage::LoadFile()
 
 			if (num <= 9)
 				maps_[row].push_back(num);
-			else if (num <= 19)
+			else if (num <= 39)
 			{
 				maps_[row].push_back(0);
 				Vector2 pos = { (float)col,(float)row };
 				pos *= kMapchipSize_;
-				EnemyManager::GetInstance()->AddEnemy(pos);
+				EnemyManager::GetInstance()->AddEnemy(pos, num);
 			}
 			++col;
 				

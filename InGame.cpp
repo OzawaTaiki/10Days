@@ -41,6 +41,12 @@ void InGame::Initialize()
 
 void InGame::Update()
 {
+	if (Input::GetInstance()->TriggerKey(DIK_R))
+		Initialize();
+
+	//stage_->Update();
+
+
 	thwomp_->Update();
 	defenceTarget_->Update();
 	enemyManager_->Update();
@@ -54,7 +60,7 @@ void InGame::Update()
 	defenceTarget_->PositionUpdate();
 	enemyManager_->PositionUpdate();
 
-	if (!defenceTarget_->Isalive() || Input::GetInstance()->TriggerKey(DIK_RETURN))
+	if (!defenceTarget_->Isalive() || Input::GetInstance()->TriggerKey(DIK_RETURN) || score_ >= 1000)
 		isChange_ = true;
 }
 
