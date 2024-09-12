@@ -2,6 +2,7 @@
 #include "EnemyManager.h"
 #include <fstream>
 #include "Input.h"
+#include "DefenceTarget.h"
 
 void Stage::Initialize()
 {
@@ -30,7 +31,7 @@ void Stage::Draw(const sRendering& _rendring)
 				Matrix3x3 wvpvpMat = _rendring.GetwvpVpMat(wMat);
 
 				Vector2 drawpos = Transform({ 0,0 }, wvpvpMat);
-				Novice::DrawBox((int)drawpos.x, (int)drawpos.y, (int)kMapchipSize_ - 1, (int)kMapchipSize_ - 1, 0, 0xffffff80, kFillModeSolid);
+				Novice::DrawBox((int)drawpos.x, (int)drawpos.y, (int)kMapchipSize_ - 1, (int)kMapchipSize_ - 1, 0, WHITE, kFillModeSolid);
 			}
 		}
 	}
@@ -121,14 +122,18 @@ bool Stage::CollisionCheck(Rect& _rect, Vector2& _move)
 	return hit;
 }
 
-bool Stage::CollisionWithPrincess(Rect& _rect, Vector2& _move, Vector2& _velo)
+bool Stage::CollisionWithPrincess(DefenceTarget* _target)
 {
-	bool hit = CollisionCheck(_rect, _move);
+	Rect rect = _target->GetRect();
+	Vector2& move = _target->GetMove();
+	Vector2& velo = _target->GetVelo();
+
+	bool hit = CollisionCheck(rect, move);
 
 	int posX[2];
 	int posY[2];
 
-	Vector2 ppos = { _rect.worldVerties[1].x + kMapchipSize_ / 5.0f,_rect.pos.y + kMapchipSize_ / 2.0f };
+	Vector2 ppos = { rect.worldVerties[1].x + kMapchipSize_ / 5.0f,rect.pos.y + kMapchipSize_ / 2.0f };
 	posX[0] = static_cast<int>(ppos.x / kMapchipSize_);
 	posY[0] = static_cast<int>(ppos.y / kMapchipSize_);
 
@@ -144,27 +149,30 @@ bool Stage::CollisionWithPrincess(Rect& _rect, Vector2& _move, Vector2& _velo)
 		// その上にブロックがない
 		if (maps_[posY[0] - 1][posX[0]] == 0)
 		{
-			_velo = { 1,-7 };
-			_move = _velo;
+			velo = { 1,-7 };
+			move = velo;
 			hit = true;
 		}
 	}
 
-	ppos = { _rect.worldVerties[2].x,_rect.worldVerties[2].y };
+	ppos = { rect.worldVerties[2].x,rect.worldVerties[2].y };
 	posX[0] = static_cast<int>(ppos.x / kMapchipSize_);
 	posY[0] = static_cast<int>(ppos.y / kMapchipSize_);
-	ppos = { _rect.worldVerties[3].x,_rect.worldVerties[3].y };
+	ppos = { rect.worldVerties[3].x,rect.worldVerties[3].y };
 	posX[1] = static_cast<int>(ppos.x / kMapchipSize_);
 	posY[1] = static_cast<int>(ppos.y / kMapchipSize_);
 
 	// 真下にブロックがある
 	// その右にブロックがない
-	if (_move.y == 0 &&
+	if (move.y == 0 &&
 		maps_[posY[0]][posX[0]] <= 9 &&
 		maps_[posY[1]][posX[1]] == 0)
 	{
-		_move = { 0,0 };
+		_target->SetStopInCliff(true);
 	}
+	else
+		_target->SetStopInCliff(false);
+
 
 	return hit;
 }

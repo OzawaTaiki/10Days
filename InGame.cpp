@@ -94,7 +94,6 @@ void InGame::CheckCollisions()
 	if (IsCollision(cameraRect, targetRect))
 	{
 		defenceTarget_->OnCollision(CollisoinAttribute::ScreenRect);
-		// TODO : 入っているときは敵に対してノックバックしない（バグ
 	}
 
 	for (auto& enemy : enemyManager_->GetEnemyList())
@@ -128,18 +127,22 @@ void InGame::CheckCollisions()
 		defenceTarget_->OnCollision(CollisoinAttribute::CrushingWall);
 	}
 
-	if (thwomp_->IsInFallState() && CheckTopDownCollision(thwompRect,thwomp_->GetMove(), targetRect,defenceTarget_->GetMove()))
+	if (thwomp_->IsInFallState() && CheckTopDownCollision(thwompRect, thwomp_->GetMove(), targetRect, defenceTarget_->GetMove()))
 	{
 		thwomp_->OnCollision(CollisoinAttribute::DefenceTarget);
 		defenceTarget_->OnCollision(CollisoinAttribute::Thwomp);
 	}
+	//TODO : ↓
 	// ガードンが落下中じゃないとき
 	// ガードンが姫より下にいて，一定範囲内にいるとき
 	// 姫，ガードンの上を歩く
-	else if ()
+	else if (!thwomp_->IsInFallState() && IsAbove(thwompRect, targetRect) && IsCollisionWithSizeOffset(thwompRect, targetRect, { 10,32 }))
 	{
-
+		defenceTarget_->SetWalkOnThwomp(true);
+		defenceTarget_->GetMove().y = 0;
 	}
+	else
+		defenceTarget_->SetWalkOnThwomp(false);
 
 	sLine cRectDownEdge = camera_->GetLine();
 	if (IsCollision(thwompRect, cRectDownEdge))
@@ -152,7 +155,7 @@ void InGame::CheckCollisions()
 	{
 		thwomp_->OnCollision(CollisoinAttribute::Stage);
 	}
-	if (stage_->CollisionWithPrincess(targetRect, defenceTarget_->GetMove(), defenceTarget_->GetVelo()))
+	if (stage_->CollisionWithPrincess(defenceTarget_.get()))
 	{
 		defenceTarget_->OnCollision(CollisoinAttribute::Stage);
 	}
@@ -182,6 +185,7 @@ void InGame::CheckCollisions()
 		}
 	}
 }
+
 
 void InGame::DrawScore()
 {

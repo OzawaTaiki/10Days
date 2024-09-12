@@ -8,7 +8,7 @@
 void Thwomp::Initialize(const Vector2& _pos, bool _playStaging)
 {
 	Vector2 pos = _pos;
-	Vector2 size = { 96,128 };
+	Vector2 size = { 96,100 };
 	rect_.SetValue(pos, size);
 
 	Vector2 margin = { 128,0 };
@@ -87,7 +87,7 @@ void Thwomp::Draw(const sRendering& _rendring)
 					 (int)rect_.screenVerties[1].x, (int)rect_.screenVerties[1].y,
 					 (int)rect_.screenVerties[2].x, (int)rect_.screenVerties[2].y,
 					 (int)rect_.screenVerties[3].x, (int)rect_.screenVerties[3].y,
-					 0, 0, (int)rect_.size.x, (int)rect_.size.y,
+					 0, 28, (int)rect_.size.x, (int)rect_.size.y,
 					 textureHandle_, color_);
 
 #ifdef _DEBUG

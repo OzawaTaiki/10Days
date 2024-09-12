@@ -493,6 +493,25 @@ bool IsCollisionWithMouse(const Vector2& _pos, const Vector2& _size)
 	return IsCollision(rect, mousePos);
 }
 
+bool IsAbove(const Rect& _rect1, const Rect& _rect2)
+{
+	if (_rect1.worldVerties[0].y <= _rect2.worldVerties[2].y)
+		return true;
+
+	return false;
+}
+
+bool IsCollisionWithSizeOffset(const Rect& _rect1, const Rect& _rect2, const Vector2& _offsetOf2)
+{
+	Rect rect = _rect2;
+	rect.SetValue(rect.pos, rect.size + _offsetOf2);
+
+	if (IsCollision(_rect1, rect))
+		return true;
+
+	return false;
+}
+
 bool CheckTopDownCollision(const Rect& _rect1, const Vector2& _move1, const Rect& _rect2, const Vector2& _move2)
 {
 	// 移動前に１の下辺が２の上辺より上にあるか
