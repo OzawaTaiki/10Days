@@ -21,6 +21,7 @@ public:
 	bool WalkOnThwomp_() { return walkOnThwomp_; }
 	Rect GetRect() const { return rect_; };
 	CollisoinAttribute GetCollisoinAttribute() { return CollisoinAttribute::DefenceTarget; }
+	int GetHp() { return hp_; }
 
 	void SetWalkOnThwomp(bool _walk) { walkOnThwomp_ = _walk; }
 	void SetStopInCliff(bool _stop) { stopInCliff_ = _stop; }

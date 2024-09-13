@@ -26,9 +26,13 @@ private:
 	void CheckCollisions();
 
 	void DrawScore();
+	void DrawHp();
 
 	float score_Scale_ = 0.6f;
 	Vector2 score_pos_ = { 20,20 };
+
+	Vector2 HP_Size_ = { 64,64 };
+	Vector2 HP_pos_ = { 32,640 };
 
 	sRendering										rendering_;
 
@@ -41,6 +45,8 @@ private:
 	std::unique_ptr<CrushingWall>					crushingWall_;
 	std::unique_ptr<DefenceTarget>					defenceTarget_;
 	std::unique_ptr<BackGround>						backGround_;
+
+	int textureHadle_;
 
 	uint32_t score_;
 };

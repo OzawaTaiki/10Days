@@ -12,6 +12,8 @@ InGame::~InGame()
 
 void InGame::Initialize()
 {
+	textureHadle_ = Novice::LoadTexture("./Resources/Images/HP.png");
+
 	camera_= std::make_unique<Camera>();
 	camera_->Initialize();
 
@@ -91,6 +93,7 @@ void InGame::Draw()
 	camera_->Draw(re);
 
 	DrawScore();
+	DrawHp();
 }
 
 void InGame::CheckCollisions()
@@ -212,4 +215,16 @@ void InGame::DrawScore()
 
 	DrawDigit(score_, score_pos_, WHITE, score_Scale_);
 
+}
+
+void InGame::DrawHp()
+{
+#ifdef _DEBUG
+	ImGui::Begin("HP");
+	ImGui::DragFloat2("pos", &HP_pos_.x, 1.0f);
+	ImGui::DragFloat2("scale", &HP_Size_.x, 0.1f);
+	ImGui::End();
+#endif // _DEBUG
+	int hp = defenceTarget_->GetHp();
+	Novice::DrawSpriteRect((int)HP_pos_.x, (int)HP_pos_.y, 0, 0, (int)HP_Size_.x*hp, (int)HP_Size_.y, textureHadle_,0.25f*hp, 1.0f, 0, WHITE);
 }
