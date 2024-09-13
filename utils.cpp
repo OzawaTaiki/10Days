@@ -627,6 +627,15 @@ void LoadNumSprite()
 		Novice::LoadTexture("./Resources/Images/Numbers/9.png");
 }
 
+Vector2 sRendering::GetPos() const
+{
+	Vector2 result;
+	result.x = worldMatrix.m[2][0];
+	result.y = worldMatrix.m[2][1];
+
+	return result;
+}
+
 Matrix3x3 sRendering::GetwvpVpMat(const Matrix3x3& _worldMat) const
 {
 	Matrix3x3 result;

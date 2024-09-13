@@ -15,6 +15,7 @@ public:
 	void SetMovableRange(const Vector2& _min, const Vector2& _max) { minMovableRange_ = _min; maxMovableRange_ = _max; };
 
 	Vector2 GetShake() { return shake_; }
+	Vector2 GetMove() { return move_; }
 	sRendering GetRenderringMatrix() { return rendering_; }
 	Rect GetRect() const { return screenRect_; };
 	sLine GetLine() const { return downLine_; };
@@ -29,6 +30,7 @@ private:
 	Vector2						pos_;
 	Vector2						size_;
 	Vector2						scale_;
+	Vector2 move_;
 
 	Vector2						returnPos_;
 

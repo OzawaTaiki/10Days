@@ -42,7 +42,6 @@ void InGame::Initialize()
 
 void InGame::Update()
 {
-
 	if (Input::GetInstance()->TriggerKey(DIK_R))
 		Initialize();
 
@@ -61,6 +60,8 @@ void InGame::Update()
 	thwomp_->PositionUpdate();
 	defenceTarget_->PositionUpdate();
 	enemyManager_->PositionUpdate();
+
+	backGround_->Update();
 
 #ifdef _DEBUG
 	if(Input::GetInstance()->TriggerKey(DIK_RETURN))

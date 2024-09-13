@@ -63,7 +63,6 @@ void Enemy::Draw(const sRendering& _rendring)
 	{
 		rect_.screenVerties[index] = Transform(rect_.localVertices[index], wvpvpMat);
 	}
-
 	
 
 	/*Novice::DrawQuad((int)rect_.screenVerties[0].x - 1, (int)rect_.screenVerties[0].y - 1,

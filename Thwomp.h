@@ -17,6 +17,7 @@ public:
 	void				OnCollisionToLine(const sLine& _line);
 
 	void				PositionUpdate();
+	Vector2 GetpreMove() { return returnMove_; }
 
 	int					GetTextureHandle()		{ return textureHandle_; }
 	size_t				GetCharge()				{ return charge_; }
@@ -71,6 +72,8 @@ private:
 	int						frameCountForCharge_;
 	int						chargeThreshold_[3];
 	Vector2					chargeScale_[3];
+
+	Vector2 returnMove_;
 
 	float					moveSpeed_;
 
