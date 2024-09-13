@@ -5,7 +5,7 @@
 
 void DefenceTarget::Initialize()
 {
-	Vector2 pos = { 100,500 - 32 };
+	Vector2 pos = { 100,512 - 128 };
 	Vector2 size = { 64,128 };
 	rect_.SetValue(pos, size);
 

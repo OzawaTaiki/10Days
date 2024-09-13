@@ -228,6 +228,7 @@ void Thwomp::StartReadyState()
 
 void Thwomp::StartStagingFromTitle()
 {
+	move_ = { 0,0 };
 	prePos_ = { 640,100 };
 	currentState_();
 

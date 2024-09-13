@@ -17,7 +17,7 @@ void Camera::Initialize()
 
 	moveSpeed_ = 8.0f;
 	
-	Vector2 rectSize = { 360,640 };
+	Vector2 rectSize = { 540,640 };
 	screenRect_.SetValue(pos_, rectSize);
 
 	isShake_ = false;

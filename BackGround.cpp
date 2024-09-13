@@ -6,7 +6,7 @@ void BackGround::Initialize()
 	pos_ = {0.0f,0.0f};
 
 	size_ = { 1280.0f,720.0f };
-	scale_ = { 1.0f,1.0f };
+	scale_ = { 1.2f,1.2f };
 
 	textureHandle_[0]= Novice::LoadTexture("./Resources/Images/backGround1.png");
 	textureHandle_[1]= Novice::LoadTexture("./Resources/Images/backGround2.png");

@@ -36,5 +36,6 @@ private:
 	std::stringstream					mapchipData_;
 
 	const float							kMapchipSize_					= 64.0f;
+	int textureHandle_[2];
 
 };

@@ -68,7 +68,7 @@ void InGame::Update()
 		isChange_ = true;
 #endif // _DEBUG
 
-	if (!defenceTarget_->Isalive() ||  score_ >= 1000)
+	if (!defenceTarget_->Isalive() || score_ >= 360)
 		isChange_ = true;
 }
 

@@ -9,7 +9,7 @@
 #include "SceneManager.h"
 #include "SoundManager.h"
 
-const char kWindowTitle[] = "GJ";
+const char kWindowTitle[] = "2007_ガードン";
 
 static const int kWindowWidth = 1280;
 static const int kWindowHeight = 720;
@@ -35,7 +35,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	soundManager->RegisterSound("SE_GuardonCharging",	"./Resources/Sounds/SE_GuardonCharging.wav",	false,		0.3f);
 	soundManager->RegisterSound("SE_GuardonFalling",	"./Resources/Sounds/SE_GuardonFalling.mp3",		false,		0.6f);
 	soundManager->RegisterSound("SE_Wall",				"./Resources/Sounds/SE_Wall.wav",				true,		0.6f);
-	soundManager->RegisterSound("SE_Knockback",			"./Resources/Sounds/SE_Knockback.wav",			false,		0.45f);
+	soundManager->RegisterSound("SE_Knockback",			"./Resources/Sounds/SE_Knockback.wav",			false,		0.25f);
 
 
 	SceneManager* sceneManager = nullptr;

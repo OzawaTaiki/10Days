@@ -16,7 +16,7 @@ void FromTitle::Initialize()
 	stage_->Initialize();
 
 	Vector2 enemyPopPos = thwomp_->GetPos();
-	enemyPopPos.y = 700;
+	enemyPopPos.y = 512 - 64;
 
 	enemyManager_ = EnemyManager::GetInstance();
 	enemyManager_->Initialize(thwomp_.get());

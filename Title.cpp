@@ -41,7 +41,7 @@ void Title::Draw()
 	Vector2 drawpos = pos_ - size_ / 2.0f;
 	Novice::DrawSpriteRect((int)drawpos.x, (int)drawpos.y,
 						   0, 0, (int)size_.x, (int)size_.y, 
-						   thwomp_->GetTextureHandle() , 0.25f, 1.0f, 
+						   thwomp_->GetTextureHandle() , 0.125f, 1.0f, 
 						   0, WHITE);
 
 }

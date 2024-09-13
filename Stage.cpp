@@ -12,6 +12,9 @@ void Stage::Initialize()
 		LoadFile(i);
 	mapSegmentWidth_ = kMapchipSize_ * (float)maps_[0][0].size();
 	nowMapNum_ = 0;
+
+	textureHandle_[0] = Novice::LoadTexture("./Resources/images/block1.png");
+	textureHandle_[1] = Novice::LoadTexture("./Resources/images/block2.png");
 };
 
 void Stage::Update()
@@ -47,7 +50,10 @@ void Stage::Draw(const sRendering& _rendring)
 					Matrix3x3 wvpvpMat = _rendring.GetwvpVpMat(wMat);
 
 					Vector2 drawpos = Transform({ 0,0 }, wvpvpMat);
-					Novice::DrawBox((int)drawpos.x, (int)drawpos.y, (int)kMapchipSize_ - 1, (int)kMapchipSize_ - 1, 0, WHITE, kFillModeSolid);
+					if (maps_[i][y][x] == 1)
+						Novice::DrawSprite((int)drawpos.x, (int)drawpos.y, textureHandle_[0], 1, 1, 0, WHITE);
+					if (maps_[i][y][x] == 2)
+						Novice::DrawSprite((int)drawpos.x, (int)drawpos.y, textureHandle_[1], 1, 1, 0, WHITE);
 				}
 			}
 		}
