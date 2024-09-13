@@ -56,6 +56,10 @@ private:
 	void				FallingState();
 	void				ReturningState();
 
+	void				Animation(int frameCountForCharge);
+
+	void				Impact();
+
 	std::function<void()>	currentState_;
 
 
@@ -91,7 +95,15 @@ private:
 	int						textureHandle_;
 	unsigned int			color_;
 
+	int						textureIndex_ = 0;				//何枚目を表示するか
+	int						currentAnimationCount_ = 0;		//カウント用
+	int						animationFrame_ = 10;			//何フレームで切り替えるか
 
+	/*int						impacttextureHandle_;
+	Rect					impact;
+	int						impactcount = -1;
+	int						impacttextureIndex_ = 0;*/
+	
 	Input*					input_					= nullptr;
 
 	void ShowImgui();
