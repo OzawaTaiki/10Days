@@ -1,7 +1,7 @@
 ﻿#include "InGame.h"
 #include "CollisionAtrribute.h"
 #include "ImGuiManager.h"
-
+#include "SoundManager.h"
 #include "Input.h"
 
 InGame::~InGame()
@@ -37,6 +37,7 @@ void InGame::Initialize()
 	camera_->SetMovableRange({ 0,0, },range);
 	camera_->SetParent(thwomp_->GetPositoinPtr());
 	defenceTarget_->SetThwompPtr(thwomp_.get());
+
 }
 
 void InGame::Update()

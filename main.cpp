@@ -7,6 +7,7 @@
 #include "InGame.h"
 #include "RandomGenerator.h"
 #include "SceneManager.h"
+#include "SoundManager.h"
 
 const char kWindowTitle[] = "GJ";
 
@@ -30,6 +31,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//sceneManager->Initialize(sceneName::Title);
 	sceneManager->Initialize(sceneName::Game);
 
+	SoundManager* soundManager = nullptr;
+	soundManager = SoundManager::GetInstance();
+	soundManager->Initilize();
+
+	soundManager->RegisterSound("BGM_InGame",			"./Resources/Sounds/BGM_Game.wav",				true,		0.99f);
+	soundManager->RegisterSound("SE_GuardonLanding",	"./Resources/Sounds/SE_GuardonLanding.mp3",		false,		0.99f);
+	soundManager->RegisterSound("SE_GuardonCharging",	"./Resources/Sounds/SE_GuardonCharging.wav",	false,		0.99f);
+	soundManager->RegisterSound("SE_GuardonFalling",	"./Resources/Sounds/SE_GuardonFalling.mp3",		false,		0.99f);
+	soundManager->RegisterSound("SE_Wall",				"./Resources/Sounds/SE_Wall.wav",				true,		0.99f);
+	soundManager->RegisterSound("SE_Knockback",			"./Resources/Sounds/SE_Knockback.wav",			false,		0.99f);
+
 	RandomGenerator* randomGenerator = nullptr;
 	randomGenerator->GetInstance();
 
@@ -43,12 +55,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::GetHitKeyStateAll(keys);
 
 
-
 		///
 		/// ↓更新処理ここから
 		///
-
+		
 		sceneManager->Update();
+		soundManager->Update();
 
 		///
 		/// ↑更新処理ここまで
@@ -59,6 +71,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		sceneManager->Draw();
+		soundManager->Play();
 
 		///
 		/// ↑描画処理ここまで
