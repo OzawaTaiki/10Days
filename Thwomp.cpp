@@ -45,7 +45,9 @@ void Thwomp::Initialize(const Vector2& _pos, bool _playStaging)
 	fallSpeed_ = 15.0f;
 
 	color_ = 0xffffffff;
-	textureHandle_ = Novice::LoadTexture("./Resources/Images/guardon.png");
+	textureHandle_ = Novice::LoadTexture("./Resources/Images/guardon10.png");
+
+	//impacttextureHandle_ = Novice::LoadTexture("./Resources/Images/impact.png");
 
 	input_ = Input::GetInstance();
 
@@ -69,6 +71,18 @@ void Thwomp::Update()
 	rect_.Calculate(); 
 	knockbackRect_.SetValue(rect_.pos, knockbackSize_[charge_]);
 
+	if (endFalling_) {
+		textureIndex_ = 0;
+		
+	}
+	/*if (canKnockBack_) {
+		impact = rect_;
+		if(impactcount == -1)
+		impactcount = 0;
+	}
+	if (impactcount >= 0) {
+		Impact();
+	}*/
 
 #ifdef _DEBUG
 	ShowImgui();
@@ -87,10 +101,10 @@ void Thwomp::Draw(const sRendering& _rendring)
 	}
 
 	Novice::DrawQuad((int)rect_.screenVerties[0].x, (int)rect_.screenVerties[0].y,
-					 (int)rect_.screenVerties[1].x, (int)rect_.screenVerties[1].y,
-					 (int)rect_.screenVerties[2].x, (int)rect_.screenVerties[2].y,
-					 (int)rect_.screenVerties[3].x, (int)rect_.screenVerties[3].y,
-					 0, 0, (int)rect_.size.x, (int)rect_.size.y,
+					 (int)rect_.screenVerties[1].x , (int)rect_.screenVerties[1].y,
+					 (int)rect_.screenVerties[2].x , (int)rect_.screenVerties[2].y,
+					 (int)rect_.screenVerties[3].x , (int)rect_.screenVerties[3].y,
+					 textureIndex_* (int)rect_.size.x, 0, (int)rect_.size.x, (int)rect_.size.y,
 					 textureHandle_, color_);
 
 #ifdef _DEBUG
@@ -167,6 +181,7 @@ void Thwomp::StartCharging()
 	isCharging_ = true;
 	SoundManager::GetInstance()->EnableSound("SE_GuardonCharging");
 	//color_ = 0xff0000ff;
+	
 }
 
 void Thwomp::StartFalling()
@@ -265,6 +280,7 @@ void Thwomp::ReadyState()
 	if (input_->TriggerKey(DIK_SPACE))
 	{
 		StartCharging();
+		
 		currentState_ = std::bind(&Thwomp::ChargingState, this);
 	}
 }
@@ -282,6 +298,7 @@ void Thwomp::ChargingState()
 		scale_= chargeScale_[charge_];
 		break;
 	}
+	Animation(frameCountForCharge_);
 
 
 	if (isCharging_ && !input_->PushKey(DIK_SPACE))
@@ -314,6 +331,38 @@ void Thwomp::ReturningState()
 		currentState_ = std::bind(&Thwomp::ReadyState, this);
 	}
 }
+
+void Thwomp::Animation(int frameCountForCharge)
+{
+	if (frameCountForCharge % 30 == 0) {
+		if (textureIndex_ < 7) {
+			textureIndex_++;
+		}
+	}
+	
+
+}
+
+//void Thwomp::Impact()
+//{
+//	if (impactcount < 60) {
+//		Novice::DrawQuad((int)impact.screenVerties[0].x-36, (int)impact.screenVerties[0].y,
+//			(int)impact.screenVerties[1].x + 36, (int)impact.screenVerties[1].y,
+//			(int)impact.screenVerties[2].x - 36, (int)impact.screenVerties[2].y,
+//			(int)impact.screenVerties[3].x + 36, (int)impact.screenVerties[3].y,
+//			400* impacttextureIndex_, 0, 400, 200,
+//			impacttextureHandle_, color_);
+//		impactcount++;
+//		if (impactcount % 5 == 0) {
+//			impacttextureHandle_++;
+//		}
+//		
+//	}
+//	else{
+//		impactcount = -1;
+//		impacttextureHandle_ = 0;
+//	}
+//}
 
 void Thwomp::ShowImgui()
 {
