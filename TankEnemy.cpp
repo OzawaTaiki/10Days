@@ -5,6 +5,7 @@ void TankEnemy::Initialize(const Vector2& _position, Thwomp* _thwompPtr, int _te
 	Enemy::Initialize(_position, _thwompPtr, _textureHandle);
 	
 	hp_ = 2;
+	maxTextureIndex_ = 6;
 }
 
 void TankEnemy::Update()

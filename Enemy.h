@@ -64,6 +64,7 @@ protected:
 	int						textureIndex_ = 0;				//何枚目を表示するか
 	int						currentAnimationCount_ = 0;		//カウント用
 	int						animationFrame_ = 10;			//何フレームで切り替えるか
+	int						maxTextureIndex_ = 3;
 
 	int					textureHandle_;
 	unsigned int		color_;
