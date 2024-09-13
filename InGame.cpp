@@ -42,8 +42,10 @@ void InGame::Initialize()
 
 void InGame::Update()
 {
+#ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_R))
 		Initialize();
+#endif // _DEBUG
 
 	//stage_->Update();
 
@@ -208,6 +210,6 @@ void InGame::DrawScore()
 	ImGui::End();
 #endif // _DEBUG
 
-	DrawDigit(score_, score_pos_, 255, score_Scale_);
+	DrawDigit(score_, score_pos_, WHITE, score_Scale_);
 
 }
