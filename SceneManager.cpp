@@ -4,6 +4,7 @@
 #include "Result.h"
 #include "ChangeSceneFromTitle.h"
 #include "ImGuiManager.h"
+#include "SoundManager.h"
 
 void SceneManager::Initialize(sceneName _startScene, const Vector2& _windowSize)
 {
