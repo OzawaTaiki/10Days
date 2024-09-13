@@ -115,7 +115,14 @@ void DefenceTarget::SetThwompPtr(Thwomp* _thwompPtr)
 
 void DefenceTarget::PositionUpdate()
 {
-	rect_.pos += move_;
+	if(walkOnThwomp_)
+	{
+		move_.x += thwompPtr_->GetMove().x;
+		rect_.pos += move_;
+		rect_.pos.y = thwompPtr_->GetPos().y - thwompPtr_->GetSize().y/2.0f - rect_.size.y / 2.0f;
+	}
+	else 
+		rect_.pos += move_;
 	move_ = { 0,0 };
 	rect_.Calculate();
 }
@@ -134,6 +141,7 @@ void DefenceTarget::Move()
 		Vector2 thwompPos = thwompPtr_->GetPos();
 		Vector2 thwompSize = thwompPtr_->GetSize();
 		rect_.pos.y = thwompPos.y - thwompSize.y / 2.0f - rect_.size.y / 2.0f;
+		velocity_.y = 0;
 	}
 
 	scale_ = { 1.0f,1.0f };
