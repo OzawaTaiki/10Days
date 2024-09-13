@@ -1,7 +1,8 @@
-#include "Stage.h"
+﻿#include "Stage.h"
 #include "EnemyManager.h"
 #include <fstream>
 #include "Input.h"
+#include "DefenceTarget.h"
 
 void Stage::Initialize()
 {
@@ -36,7 +37,7 @@ void Stage::Draw(const sRendering& _rendring)
 	}
 }
 
-bool Stage::CollisionCheck(Rect& _rect,Vector2& _move)
+bool Stage::CollisionCheck(Rect& _rect, Vector2& _move)
 {
 	int posX[2];
 	int posY[2];
@@ -121,6 +122,61 @@ bool Stage::CollisionCheck(Rect& _rect,Vector2& _move)
 	return hit;
 }
 
+bool Stage::CollisionWithPrincess(DefenceTarget* _target)
+{
+	Rect rect = _target->GetRect();
+	Vector2& move = _target->GetMove();
+	Vector2& velo = _target->GetVelo();
+
+	bool hit = CollisionCheck(rect, move);
+
+	int posX[2];
+	int posY[2];
+
+	Vector2 ppos = { rect.worldVerties[1].x + kMapchipSize_ / 5.0f,rect.pos.y + kMapchipSize_ / 2.0f };
+	posX[0] = static_cast<int>(ppos.x / kMapchipSize_);
+	posY[0] = static_cast<int>(ppos.y / kMapchipSize_);
+
+	
+
+	if (posX[0] >= maps_[0].size())
+		posX[0] = static_cast<int>(maps_[0].size() - 1);
+
+	// 先にブロックがある
+	if (maps_[posY[0]][posX[0]] != 0 &&
+		maps_[posY[0]][posX[0]] <= 9 )
+	{
+		// その上にブロックがない
+		if (maps_[posY[0] - 1][posX[0]] == 0)
+		{
+			velo = { 1,-7 };
+			move = velo;
+			hit = true;
+		}
+	}
+
+	ppos = { rect.worldVerties[2].x,rect.worldVerties[2].y };
+	posX[0] = static_cast<int>(ppos.x / kMapchipSize_);
+	posY[0] = static_cast<int>(ppos.y / kMapchipSize_);
+	ppos = { rect.worldVerties[3].x,rect.worldVerties[3].y };
+	posX[1] = static_cast<int>(ppos.x / kMapchipSize_);
+	posY[1] = static_cast<int>(ppos.y / kMapchipSize_);
+
+	// 真下にブロックがある
+	// その右にブロックがない
+	if (move.y == 0 &&
+		maps_[posY[0]][posX[0]] <= 9 &&
+		maps_[posY[1]][posX[1]] == 0)
+	{
+		_target->SetStopInCliff(true);
+	}
+	else
+		_target->SetStopInCliff(false);
+
+
+	return hit;
+}
+
 void Stage::LoadFile()
 {
 	maps_.clear();
@@ -163,7 +219,6 @@ void Stage::LoadFile()
 				EnemyManager::GetInstance()->AddEnemy(pos, num);
 			}
 			++col;
-				
 		}
 		++row;
 	}

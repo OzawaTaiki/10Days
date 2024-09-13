@@ -41,6 +41,7 @@ void InGame::Initialize()
 
 void InGame::Update()
 {
+
 	if (Input::GetInstance()->TriggerKey(DIK_R))
 		Initialize();
 
@@ -60,7 +61,12 @@ void InGame::Update()
 	defenceTarget_->PositionUpdate();
 	enemyManager_->PositionUpdate();
 
-	if (!defenceTarget_->Isalive() || Input::GetInstance()->TriggerKey(DIK_RETURN) || score_ >= 1000)
+#ifdef _DEBUG
+	if(Input::GetInstance()->TriggerKey(DIK_RETURN))
+		isChange_ = true;
+#endif // _DEBUG
+
+	if (!defenceTarget_->Isalive() ||  score_ >= 1000)
 		isChange_ = true;
 }
 
@@ -94,7 +100,6 @@ void InGame::CheckCollisions()
 	if (IsCollision(cameraRect, targetRect))
 	{
 		defenceTarget_->OnCollision(CollisoinAttribute::ScreenRect);
-		// TODO : 入っているときは敵に対してノックバックしない（バグ
 	}
 
 	for (auto& enemy : enemyManager_->GetEnemyList())
@@ -111,7 +116,7 @@ void InGame::CheckCollisions()
 			defenceTarget_->OnCollision(CollisoinAttribute::Enemy);
 			enemy->OnCollision(CollisoinAttribute::DefenceTarget);
 		}
-		if (IsCollision(thwompRect, enemyRect))
+		if (thwomp_->IsInFallState() && CheckTopDownCollision(thwompRect,thwomp_->GetMove(), enemyRect,enemy->GetMove()))
 		{
 			thwomp_->OnCollision(CollisoinAttribute::Enemy);
 			enemy->OnCollision(CollisoinAttribute::Thwomp);
@@ -128,11 +133,23 @@ void InGame::CheckCollisions()
 		defenceTarget_->OnCollision(CollisoinAttribute::CrushingWall);
 	}
 
-	if (IsCollision(thwompRect, targetRect))
+	if (thwomp_->IsInFallState() && CheckTopDownCollision(thwompRect, thwomp_->GetMove(), targetRect, defenceTarget_->GetMove()))
 	{
 		thwomp_->OnCollision(CollisoinAttribute::DefenceTarget);
 		defenceTarget_->OnCollision(CollisoinAttribute::Thwomp);
 	}
+	//TODO : ↓
+	// ガードンが落下中じゃないとき
+	// ガードンが姫より下にいて，一定範囲内にいるとき
+	// 姫，ガードンの上を歩く
+	else if (!thwomp_->IsInFallState() && IsAbove(thwompRect, targetRect) && IsCollisionWithSizeOffset(thwompRect, targetRect, { 10,32 }))
+	{
+		defenceTarget_->SetWalkOnThwomp(true);
+		defenceTarget_->GetMove().y = 0;
+	}
+	else
+		defenceTarget_->SetWalkOnThwomp(false);
+
 	sLine cRectDownEdge = camera_->GetLine();
 	if (IsCollision(thwompRect, cRectDownEdge))
 	{
@@ -144,7 +161,7 @@ void InGame::CheckCollisions()
 	{
 		thwomp_->OnCollision(CollisoinAttribute::Stage);
 	}
-	if (stage_->CollisionCheck(targetRect, defenceTarget_->GetMove()))
+	if (stage_->CollisionWithPrincess(defenceTarget_.get()))
 	{
 		defenceTarget_->OnCollision(CollisoinAttribute::Stage);
 	}
@@ -174,6 +191,7 @@ void InGame::CheckCollisions()
 		}
 	}
 }
+
 
 void InGame::DrawScore()
 {

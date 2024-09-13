@@ -493,6 +493,48 @@ bool IsCollisionWithMouse(const Vector2& _pos, const Vector2& _size)
 	return IsCollision(rect, mousePos);
 }
 
+bool IsAbove(const Rect& _rect1, const Rect& _rect2)
+{
+	if (_rect1.worldVerties[0].y <= _rect2.worldVerties[2].y)
+		return true;
+
+	return false;
+}
+
+bool IsCollisionWithSizeOffset(const Rect& _rect1, const Rect& _rect2, const Vector2& _offsetOf2)
+{
+	Rect rect = _rect2;
+	rect.SetValue(rect.pos, rect.size + _offsetOf2);
+
+	if (IsCollision(_rect1, rect))
+		return true;
+
+	return false;
+}
+
+bool CheckTopDownCollision(const Rect& _rect1, const Vector2& _move1, const Rect& _rect2, const Vector2& _move2)
+{
+	// 移動前に１の下辺が２の上辺より上にあるか
+	// 移動前の座標でxの重なり確認
+	if (_rect1.worldVerties[3].y >= _rect2.worldVerties[0].y &&
+		_rect1.worldVerties[0].x <= _rect2.worldVerties[1].x &&
+		_rect1.worldVerties[1].x >= _rect2.worldVerties[0].x)
+	{
+		Rect rect1 = _rect1;
+		Rect rect2 = _rect2;
+		rect1.pos += _move1;
+		rect2.pos += _move2;
+		rect1.Calculate();
+		rect2.Calculate();
+
+		// 移動後の衝突判定をとる
+		if (IsCollision(rect1, rect2))
+			return true;
+	}
+
+	return false;
+}
+
 Vector2 GetDirectionToTarget(const Vector2& _targetPos, const Vector2& _myPos)
 {
 	Vector2 result = { 0,0 };
@@ -592,7 +634,6 @@ Matrix3x3 sRendering::GetwvpVpMat(const Matrix3x3& _worldMat) const
 	result = Multiply(_worldMat, this->viewMatrix);
 	result = Multiply(result, this->orthoMatrix);
 	result = Multiply(result, this->viewportMatrix);
-
 
 	return result;
 }

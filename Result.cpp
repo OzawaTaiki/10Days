@@ -32,12 +32,13 @@ void Result::Update()
 {
 
 #ifdef _DEBUG
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE))
+		isChange_ = true;
 #endif // _DEBUG
-		Input::GetInstance()->IsTriggerMouse(0) && hitValue_ != -1)
-			isChange_ = true;
-		else
-			hitValue_ = -1;
+	if (Input::GetInstance()->IsTriggerMouse(0) && hitValue_ != -1)
+		isChange_ = true;
+	else
+		hitValue_ = -1;
 	for (int i = 0; i < 2; i++)
 	{
 		if (IsCollisionWithMouse(pos_[i], defaultSize_))

@@ -14,11 +14,16 @@ public:
 
 
 	Vector2& GetMove() { return move_; }
+	Vector2& GetVelo() { return velocity_; }
 	Vector2 GetPos() { return rect_.pos; }
 	bool Isalive() { return isAlive_; }
+	bool StopInCliff() { return stopInCliff_; }
+	bool WalkOnThwomp_() { return walkOnThwomp_; }
 	Rect GetRect() const { return rect_; };
 	CollisoinAttribute GetCollisoinAttribute() { return CollisoinAttribute::DefenceTarget; }
 
+	void SetWalkOnThwomp(bool _walk) { walkOnThwomp_ = _walk; }
+	void SetStopInCliff(bool _stop) { stopInCliff_ = _stop; }
 	void SetThwompPtr(Thwomp* _thwompPtr);
 	void PositionUpdate();
 
@@ -44,10 +49,13 @@ private:
 
 	float				moveSpeed_;
 	bool				canMoving_;
+	bool				stopInCliff_;				//段差で止まる
+	bool				walkOnThwomp_;
 
 	int					hp_;
 	const int			kMaxHp_					= 3;
 	bool				isAlive_;
+
 
 	uint32_t			damageCoolTime_;			//無敵時間（フレーム
 	uint32_t			currentCoolTime_;			//無敵時間カウント用

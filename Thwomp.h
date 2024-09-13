@@ -20,14 +20,15 @@ public:
 	void				FallToTarget(const Vector2& _targetPosition);
 	void				ReturnToTarget(const Vector2& _targetPosition);
 
-	int					GetTextureHandle() { return textureHandle_; }
+	int					GetTextureHandle()		{ return textureHandle_; }
 	size_t				GetCharge()				{ return charge_; }
 
-	bool				isReady()			{ return isReady_; }
+	bool				isReady()				{ return isReady_; }
 	bool				isReturning()			{ return isReturning_; }
 	bool				IsFalling()				{ return isFalling_; }
 	bool				EndFalling()			{ return endFalling_; }
 	bool				CanKnockback()			{ return canKnockBack_; }
+	bool				IsInFallState()			{ return isFalling_ || endFalling_; };
 
 	Vector2				GetPos()				{ return rect_.pos; }
 	Vector2				GetSize()				{ return rect_.size; }
@@ -57,7 +58,7 @@ private:
 	void				FallingState();
 	void				ReturningState();
 
-	std::function<void()> currentState_;
+	std::function<void()>	currentState_;
 
 
 	Rect					rect_;
