@@ -55,26 +55,26 @@ void Camera::Update(bool _isFalling, bool _isReturning,bool _endFall)
 #endif // _DEBUG
 
 
-	Vector2 move = { 0,0 };
+	move_ = { 0,0 };
 
 	if (_isFalling)
 	{
 		if (Input::GetInstance()->PushKey(DIK_W))
 
 		{
-			move.y -= moveSpeed_;
+			move_.y -= moveSpeed_;
 		}
 		if (Input::GetInstance()->PushKey(DIK_S))
 		{
-			move.y += moveSpeed_;
+			move_.y += moveSpeed_;
 		}
 
-		if (move.y != 0)
+		if (move_.y != 0)
 		{
-			screenRect_.pos += move;
+			screenRect_.pos += move_;
 
-			downLine_.sPos += move;
-			downLine_.ePos += move;
+			downLine_.sPos += move_;
+			downLine_.ePos += move_;
 		}
 	}
 	// 落下してないとき
