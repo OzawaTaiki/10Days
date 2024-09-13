@@ -15,6 +15,7 @@ void StacksEnemy::Initialize(const Vector2& _position, Thwomp* _thwompPtr, int _
 	Enemy::Initialize(nPos, _thwompPtr, _textureHandle);
 
 	hp_ = 1;
+	maxTextureIndex_ = 8;
 }
 
 void StacksEnemy::Update()

@@ -211,7 +211,7 @@ void Enemy::Animation()
 	if (currentAnimationCount_ % animationFrame_ == 0)
 	{
 		textureIndex_++;
-		if (textureIndex_ > 2)
+		if (textureIndex_ >= maxTextureIndex_)
 			textureIndex_ = 0;
 	}
 }
