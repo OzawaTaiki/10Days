@@ -17,8 +17,6 @@ public:
 	void				OnCollisionToLine(const sLine& _line);
 
 	void				PositionUpdate();
-	void				FallToTarget(const Vector2& _targetPosition);
-	void				ReturnToTarget(const Vector2& _targetPosition);
 
 	int					GetTextureHandle()		{ return textureHandle_; }
 	size_t				GetCharge()				{ return charge_; }

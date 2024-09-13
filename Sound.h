@@ -15,6 +15,7 @@ public:
 	void EnableSound()		{ isPlay_= true; }
 
 	void SetBaseVolume(float _volume);
+	void StopSound();
 
 	void ShowImgui();
 

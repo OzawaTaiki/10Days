@@ -4,6 +4,7 @@
 #include "input.h"
 #include "RandomGenerator.h"
 #include "ImGuiManager.h"
+#include "SoundManager.h"
 
 void Thwomp::Initialize(const Vector2& _pos, bool _playStaging)
 {
@@ -128,15 +129,6 @@ void Thwomp::PositionUpdate()
 	rect_.Calculate();
 }
 
-void Thwomp::FallToTarget(const Vector2& _targetPosition)
-{
-	_targetPosition;
-}
-
-void Thwomp::ReturnToTarget(const Vector2& _targetPosition)
-{
-	_targetPosition;
-}
 
 std::optional<Rect> Thwomp::GetKnokbackRect() const
 {
@@ -170,6 +162,7 @@ void Thwomp::StartCharging()
 {
 	isReady_ = false;
 	isCharging_ = true;
+	SoundManager::GetInstance()->EnableSound("SE_GuardonCharging");
 	//color_ = 0xff0000ff;
 }
 
@@ -181,6 +174,8 @@ void Thwomp::StartFalling()
 	prePos_= rect_.pos;
 
 	frameCountForCharge_ = 0;
+	SoundManager::GetInstance()->StopSound("SE_GuardonCharging");
+	SoundManager::GetInstance()->EnableSound("SE_GuardonFalling");
 
 	//color_ = 0x00ff00ff;
 }
