@@ -63,6 +63,11 @@ void Sound::SetBaseVolume(float _volume)
 	SetVolume();
 }
 
+void Sound::StopSound()
+{
+	audio_->StopWave(voiceHandle_);
+}
+
 void Sound::FadeIn()
 {
 	// でかくなる

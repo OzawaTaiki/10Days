@@ -26,11 +26,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	LoadNumSprite();
 
-	SceneManager* sceneManager = nullptr;
-	sceneManager = SceneManager::GetInstance();
-	//sceneManager->Initialize(sceneName::Title);
-	sceneManager->Initialize(sceneName::Game);
-
 	SoundManager* soundManager = nullptr;
 	soundManager = SoundManager::GetInstance();
 	soundManager->Initilize();
@@ -41,6 +36,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	soundManager->RegisterSound("SE_GuardonFalling",	"./Resources/Sounds/SE_GuardonFalling.mp3",		false,		0.6f);
 	soundManager->RegisterSound("SE_Wall",				"./Resources/Sounds/SE_Wall.wav",				true,		0.6f);
 	soundManager->RegisterSound("SE_Knockback",			"./Resources/Sounds/SE_Knockback.wav",			false,		0.45f);
+
+
+	SceneManager* sceneManager = nullptr;
+	sceneManager = SceneManager::GetInstance();
+	sceneManager->Initialize(sceneName::Title);
+	//sceneManager->Initialize(sceneName::Game);
 
 	RandomGenerator* randomGenerator = nullptr;
 	randomGenerator->GetInstance();

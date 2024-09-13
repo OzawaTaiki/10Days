@@ -59,3 +59,8 @@ void SoundManager::EnableSound(const std::string& _key)
 {
 	sounds_[_key]->EnableSound();
 }
+
+void SoundManager::StopSound(const std::string& _key)
+{
+	sounds_[_key]->StopSound();
+}

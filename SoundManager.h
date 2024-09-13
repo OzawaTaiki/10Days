@@ -23,6 +23,7 @@ public:
 	void StartFadeIn(const std::string& _key);
 	void StartFadeOut(const std::string& _key);
 	void EnableSound(const std::string& _key);
+	void StopSound(const std::string& _key);
 private:
 	std::unordered_map<std::string, std::unique_ptr<Sound>> sounds_;
 	Audio* audio = nullptr;
