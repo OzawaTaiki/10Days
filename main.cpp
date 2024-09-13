@@ -30,19 +30,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	soundManager = SoundManager::GetInstance();
 	soundManager->Initilize();
 
-	soundManager->RegisterSound("BGM_InGame", "./Resources/Sounds/BGM_Game.wav", true, 0.99f);
-	soundManager->RegisterSound("SE_GuardonLanding", "./Resources/Sounds/SE_GuardonLanding.mp3", false, 0.99f);
-	soundManager->RegisterSound("SE_GuardonCharging", "./Resources/Sounds/SE_GuardonCharging.wav", false, 0.99f);
-	soundManager->RegisterSound("SE_GuardonFalling", "./Resources/Sounds/SE_GuardonFalling.mp3", false, 0.99f);
-	soundManager->RegisterSound("SE_Wall", "./Resources/Sounds/SE_Wall.wav", true, 0.99f);
-	soundManager->RegisterSound("SE_Knockback", "./Resources/Sounds/SE_Knockback.wav", false, 0.99f);
+	soundManager->RegisterSound("BGM_InGame",			"./Resources/Sounds/BGM_Game.wav",				true,		0.25f);
+	soundManager->RegisterSound("SE_GuardonLanding",	"./Resources/Sounds/SE_GuardonLanding.mp3",		false,		0.8f);
+	soundManager->RegisterSound("SE_GuardonCharging",	"./Resources/Sounds/SE_GuardonCharging.wav",	false,		0.3f);
+	soundManager->RegisterSound("SE_GuardonFalling",	"./Resources/Sounds/SE_GuardonFalling.mp3",		false,		0.6f);
+	soundManager->RegisterSound("SE_Wall",				"./Resources/Sounds/SE_Wall.wav",				true,		0.6f);
+	soundManager->RegisterSound("SE_Knockback",			"./Resources/Sounds/SE_Knockback.wav",			false,		0.45f);
 
 
 	SceneManager* sceneManager = nullptr;
 	sceneManager = SceneManager::GetInstance();
 	sceneManager->Initialize(sceneName::Title);
 	//sceneManager->Initialize(sceneName::Game);
-
 
 	RandomGenerator* randomGenerator = nullptr;
 	randomGenerator->GetInstance();
