@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "utils.h"
 #include "ImGuiManager.h"
+#include "SoundManager.h"
 
 void Title::Initialize()
 {
@@ -15,6 +16,8 @@ void Title::Initialize()
 	pos_ = { 640,360 };
 	scale_ = 1.0f;
 	size_ = thwomp_->GetSize();
+
+	SoundManager::GetInstance()->EnableSound("BGM_InGame");
 }
 
 void Title::Update()

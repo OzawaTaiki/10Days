@@ -1,5 +1,11 @@
 #include "CrushingWall.h"
 #include "ImGuiManager.h"
+#include "SoundManager.h"
+
+CrushingWall::~CrushingWall()
+{
+	SoundManager::GetInstance()->StopSound("SE_Wall");
+}
 
 void CrushingWall::Initialize()
 {
@@ -22,6 +28,7 @@ void CrushingWall::Initialize()
 	textureHandle_ = Novice::LoadTexture("./Resources/Images/wall.png");
 	color_ = 0x808080f0;
 
+	SoundManager::GetInstance()->EnableSound("SE_Wall");
 	im_isMove_ = true;
 }
 
