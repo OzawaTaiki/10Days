@@ -79,7 +79,7 @@ void CrushingWall::Animation()
 	if (currentAnimationCount_ % animationFrame_ == 0)
 	{
 		textureIndex_++;
-		if (textureIndex_ > 3)
+		if (textureIndex_ > 5)
 			textureIndex_ = 0;
 	}
 }

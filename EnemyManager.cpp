@@ -19,7 +19,9 @@ void EnemyManager::Initialize(Thwomp* _thwompPtr)
 
 void EnemyManager::Update()
 {
+#ifdef _DEBUG
 	ImGui::Begin("enemy");
+#endif // _DEBUG
 	int c = 0;
 	for (auto it = enemis_.begin(); it != enemis_.end();)
 	{
@@ -35,7 +37,9 @@ void EnemyManager::Update()
 			c++;
 		}
 	}
+#ifdef _DEBUG
 	ImGui::End();
+#endif // _DEBUG
 }
 
 void EnemyManager::Draw(const sRendering& _rendring)

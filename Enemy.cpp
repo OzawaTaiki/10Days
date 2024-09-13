@@ -218,6 +218,7 @@ void Enemy::Animation()
 
 void Enemy::ShowImgui(int _num)
 {
+	_num;
 #ifdef _DEBUG
 	std::string str = "Enemy_" + std::to_string(_num);
 
