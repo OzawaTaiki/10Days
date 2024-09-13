@@ -4,6 +4,8 @@
 class CrushingWall
 {
 public:
+	~CrushingWall();
+
 	void Initialize();
 	void Update();
 	void Draw(const sRendering& _rendring);

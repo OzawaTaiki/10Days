@@ -52,7 +52,7 @@ void FromTitle::Draw()
 	Novice::DrawSprite((int)drawpos.x, (int)drawpos.y, title_, 1, 1, 0, WHITE);
 
 	stage_->Draw(re);
-	camera_->Draw(re);
+	//camera_->Draw(re);
 	thwomp_->Draw(re);
 	enemyManager_->Draw(re);
 }

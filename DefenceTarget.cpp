@@ -1,6 +1,7 @@
 ﻿#include "DefenceTarget.h"
 #include "ImGuiManager.h"
 #include "Thwomp.h"
+#include "SoundManager.h"
 
 void DefenceTarget::Initialize()
 {
@@ -173,6 +174,7 @@ void DefenceTarget::Knockback(const Vector2& _velocity )
 	isKnockback_ = true;
 	velocity_ = _velocity;
 	move_ += velocity_;
+
 }
 
 void DefenceTarget::UpdateInvincible()

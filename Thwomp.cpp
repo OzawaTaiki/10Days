@@ -185,6 +185,12 @@ void Thwomp::StartReturning()
 	isFalling_ = false;
 	isReturning_ = true;
 	scale_ = { 1,1 };
+
+	SoundManager::GetInstance()->StopSound("SE_GuardonFalling");
+	SoundManager::GetInstance()->EnableSound("SE_GuardonLanding");
+	if(canKnockBack_)
+		SoundManager::GetInstance()->EnableSound("SE_Knockback");
+
 	//color_ = 0x0000ffff;
 }
 
@@ -197,6 +203,7 @@ void Thwomp::StartReadyState()
 	isReturning_ = false;
 
 	rect_.pos = prePos_;
+	SoundManager::GetInstance()->StopSound("SE_GuardonLanding");
 
 	//color_ = 0xffffffff;
 }
