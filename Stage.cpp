@@ -65,6 +65,7 @@ bool Stage::CollisionCheck(Rect& _rect, Vector2& _move)
 	Vector2 pos = { fmod(_rect.pos.x,mapSegmentWidth_),_rect.pos.y };
 	Rect rect;
 	rect.SetValue(pos, _rect.size);
+	//rect = _rect;
 
 	int posX[2];
 	int posY[2];
@@ -121,7 +122,7 @@ bool Stage::CollisionCheck(Rect& _rect, Vector2& _move)
 		}
 		else
 		{
-			posY[0] = static_cast<int>((rect.worldVerties[2].y + _move.y - 1) / kMapchipSize_);
+			posY[0] = static_cast<int>((rect.worldVerties[2].y + _move.y - 1.5f) / kMapchipSize_);
 			posY[1] = posY[0];
 		}
 
@@ -158,14 +159,16 @@ bool Stage::CollisionWithPrincess(DefenceTarget* _target)
 	bool hit = CollisionCheck(rect, move);
 	int mapNum = static_cast<int> (rect.pos.x / mapSegmentWidth_);
 
+	rect.pos.x = fmod(rect.pos.x, mapSegmentWidth_);
+	rect.Calculate();
+
 	int posX[2];
 	int posY[2];
 
 	Vector2 ppos = { rect.worldVerties[1].x + kMapchipSize_ / 5.0f,rect.pos.y + kMapchipSize_ / 2.0f };
 	posX[0] = static_cast<int>(ppos.x / kMapchipSize_);
 	posY[0] = static_cast<int>(ppos.y / kMapchipSize_);
-
-	
+		
 
 	if (posX[0] >= maps_[0].size())
 		posX[0] = static_cast<int>(maps_[0].size() - 1);
@@ -182,19 +185,41 @@ bool Stage::CollisionWithPrincess(DefenceTarget* _target)
 			hit = true;
 		}
 	}
+	if (hit)
+	{
+		rect.worldVerties[2].y++;
+		rect.worldVerties[3].y++;
+	}
 
 	ppos = { rect.worldVerties[2].x,rect.worldVerties[2].y };
+	if (ppos.x < 0)
+		ppos.x -= kMapchipSize_;
 	posX[0] = static_cast<int>(ppos.x / kMapchipSize_);
 	posY[0] = static_cast<int>(ppos.y / kMapchipSize_);
 	ppos = { rect.worldVerties[3].x,rect.worldVerties[3].y };
+	if (ppos.x < 0)
+		ppos.x -= kMapchipSize_;
 	posX[1] = static_cast<int>(ppos.x / kMapchipSize_);
 	posY[1] = static_cast<int>(ppos.y / kMapchipSize_);
+
+	int map1 = mapNum, map2 = mapNum;
+
+	if (posX[0] < 0)
+	{
+		map1--;
+		posX[0] = 39;
+	}
+	if (posX[1] > 39)
+	{
+		map2++;
+		posX[1] = 0;
+	}
 
 	// 真下にブロックがある
 	// その右にブロックがない
 	if (move.y == 0 &&
-		maps_[mapNum][posY[0]][posX[0]] <= 9 &&
-		maps_[mapNum][posY[1]][posX[1]] == 0)
+		maps_[map1][posY[0]][posX[0]] <= 9 &&
+		maps_[map2][posY[1]][posX[1]] == 0)
 	{
 		_target->SetStopInCliff(true);
 	}

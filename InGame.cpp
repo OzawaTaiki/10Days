@@ -149,7 +149,7 @@ void InGame::CheckCollisions()
 		defenceTarget_->SetWalkOnThwomp(true);
 		defenceTarget_->GetMove().y = 0;
 	}
-	else
+	else if(thwomp_->IsInFallState() || !IsCollisionWithSizeOffset(thwompRect, targetRect, {10,32}))
 		defenceTarget_->SetWalkOnThwomp(false);
 
 	sLine cRectDownEdge = camera_->GetLine();

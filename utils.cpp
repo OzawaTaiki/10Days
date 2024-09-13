@@ -495,7 +495,7 @@ bool IsCollisionWithMouse(const Vector2& _pos, const Vector2& _size)
 
 bool IsAbove(const Rect& _rect1, const Rect& _rect2)
 {
-	if (_rect1.worldVerties[0].y <= _rect2.worldVerties[2].y)
+	if (_rect1.worldVerties[0].y >= _rect2.worldVerties[2].y)
 		return true;
 
 	return false;

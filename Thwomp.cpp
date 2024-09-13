@@ -64,6 +64,7 @@ void Thwomp::Initialize(const Vector2& _pos, bool _playStaging)
 
 void Thwomp::Update()
 {
+	move_ = { 0,0 };
 
 	returnMove_ = { 0,0 };
 	currentState_();
@@ -142,7 +143,6 @@ void Thwomp::PositionUpdate()
 {
 	rect_.pos += move_;
 	returnMove_ = move_;
-	move_ = { 0,0 };
 	rect_.Calculate();
 }
 
