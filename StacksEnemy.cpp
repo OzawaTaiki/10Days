@@ -20,6 +20,10 @@ void StacksEnemy::Initialize(const Vector2& _position, Thwomp* _thwompPtr, int _
 
 void StacksEnemy::Update()
 {
+	if (rect_.pos.y >= 730)
+		Dead();
+
+
 	scale_ = { 1.0f,1.0f };
 	if (!canMoving_ || !Im_isMove_)
 		return;

@@ -43,6 +43,9 @@ void Enemy::Initialize(const Vector2& _position, Thwomp* _thwompPtr, int _textur
 
 void Enemy::Update()
 {
+	if (rect_.pos.y >= 730)
+		Dead();
+
 	Move();
 	UpdateInvincible();
 
